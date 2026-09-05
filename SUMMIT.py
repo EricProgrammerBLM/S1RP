@@ -42,27 +42,7 @@ border = Border(
     bottom=Side(border_style='thin', color='040005')
 )
 
-'''
-Old Function Below
-def Create_Post(cells_to_merge, the_row, the_col, post,):
-	if len(cells_to_merge) > 4:
-		ws.merge_cells(cells_to_merge)                  #Cells that will be merged. Example: 'A1:C1'
-		cell = ws.cell(row = the_row, column = the_col) #Gives the location of where the text will be placed
-		cell.value = post                               #The string that will be displayed inside of the merged cells
-		cell.alignment = Alignment(horizontal= 'center', vertical='center') #The position of the text
-		merged_cells_range = ws[cells_to_merge]
-		for row in merged_cells_range:
-			for cell in row:
-				cell.border = border                    #Adds a border around any cells that merge
-	elif len(cells_to_merge) < 4:
-		cell = ws.cell(row = the_row, column = the_col) #Gives the location of where the text will be placed
-		cell.value = post                               #The string that will be displayed inside of the merged cells
-		cell.alignment = Alignment(horizontal= 'center', vertical='center') #The position of the text
-		cell.border = border    
 
-
-	wb.save(File_Name)
-	'''
 
 def Create_Post(cells_to_merge, the_row, the_col, post):
     # ADDED THIS CONDITION:
@@ -85,6 +65,9 @@ def Create_Post(cells_to_merge, the_row, the_col, post):
     cell = ws.cell(row=the_row, column=the_col)
     cell.value = post
     cell.alignment = Alignment(horizontal='center', vertical='center')
+
+
+
 
 Create_Post('A1:V1', 1, 1, 'GUEST EXPERIENCE DAILY POST ROTATIONS PM')
 Create_Post('A2:V2', 2, 1, str(date.today()))
@@ -168,10 +151,12 @@ but overall every post in Tier 2 can go on without someone being there, if their
 #Update for this began 6/17/25
 B1_Tier_1 = ['RISE TABLET','RISE LINE', "HELLO 1", 'SHOES 1', 'CELEBRATE', 'PLAZA VANDY', 'PLAZA MAD', 'HELLO 2**', 'QUEUE', 'KIOSK', 'TURNSTILE', 'WELCOME', 'TICKET CHECK'] #Updated
 B1_Tier_2 = ['HELLO 3**', 'TURNSTILE 2**','SHOES 2**', 'SHOE PREP**', 'RISE LINE 2**', 'FACESCAN**', 'SHOE PREP**', 'SHOE PREP**', 'SHOE PREP**' ] #Updated Last 10/25
-
-Mix_Of_Both_B1_Tiers = ["HELLO 1", 'SHOES 1', 'CELEBRATE', 'RISE LINE', 'PLAZA VANDY', 'PLAZA MAD', 'RISE TABLET', 'HELLO 2', 'QUEUE', 'LAUNCH**',
-'SHOES 2**', 'SHOE PREP**']
 B1_Tier_3 = ['SHOES 2**', 'SHOE PREP**', 'LAUNCH**'] #Shouldn't be a Tier 3, only added for the purpose of OB1 and OB2. May keep this when we re-write B1
+Mix_Of_Both_B1_Tiers = []
+Mix_Of_Both_B1_Tiers.extend(B1_Tier_1 + B1_Tier_2 + B1_Tier_3) 
+#If this updated list above somehow causes an error, dig this up from one of our previous versions of this code. This is needed specifically for when we borrow a B1 Post and Use Celebrat to help with upstairs rotations
+
+
 LEAD_ENDING_POST_B1 = ['LAUNCH**', 'QUEUE', 'RISE LINE'] #Can possibly delete this after B1 is REWRITTEN
 
 OB1_Tier_1 = ['AFF 1', 'TR1**', 'REFL', 'ESC', 'AFF 2'] #Never Edit... Unless an Important Post is needed to be Added. At some point we can add that AFF1 starts rotations under conditions it goes to Ref and Ref goes to the other Aff and that person relieves ESC
@@ -183,8 +168,12 @@ OB2_Tier_2 = ['LEVITATION**', 'UNITY 2**', 'OB2 SERVICE**', 'EXIT LINE 2**', 'AP
 OB3_Tier_1 = [] 
 
 Full_Timers_4PM_Post_On_B1 = [ 'PREP**', 'PREP**', 'PREP**', 'PREP**', 'PREP**', 'PREP**']
-Full_Timers_4PM_Post_Upstairs = ['AFF 3**', 'PREP**', 'PREP**', 'TR2**']
-#This will be filled with post to give full timers at 4PM.
+Full_Timers_4PM_Post_Upstairs = ['E TAB', 'CAB 1', 'CAB 2**', 'ASC DESK', 'AFF 3**', 'PREP', 'PREP', 'PREP', 'PREP']
+#This will be filled with post to give full timers for the PM Briefing.
+
+Full_Timers_Opening = []
+Full_Timers_Opening_Tier_1 = []
+Full_Timers_Opening_Tier_2 = []
 
 Overall_OB1_Post = OB1_Tier_1 + OB1_Tier_2
 Overall_OB2_Post = OB2_Tier_1 + OB2_Tier_2
@@ -216,8 +205,8 @@ for post in EVERYTHING_ELSE + FREIGHT + ROTATION_STARTERS:
 
 AM = ['8:00AM', '8:30AM', '9:00AM', '9:30AM', '10:00AM', '10:30AM', '11:00AM', '11:30AM', '12:00PM', '12:30PM',
 '1:00PM', '1:30PM', '2:00PM', '2:30PM', '3:00PM', '3:30PM', '4:00PM', '4:30PM', '5:00PM']
-PM = ['3:30PM', '4:00PM', '4:30PM', '5:00PM', '5:30PM', '6:00PM', '6:30PM', '7:00PM', '7:30PM', '8:00PM', '8:30PM',
-'9:00PM', '9:30PM', '10:00PM', '10:30PM', '11:00PM', '11:30PM', '12:00PM', '12:30PM']
+PM = ['3:00PM','3:30PM', '4:00PM', '4:30PM', '5:00PM', '5:30PM', '6:00PM', '6:30PM', '7:00PM', '7:30PM', '8:00PM', '8:30PM',
+'9:00PM', '9:30PM', '10:00PM', '10:30PM', '11:00PM', '11:30PM', '12:00PM'] #Added 3PM and removed , '12:30PM'
 ALPHABET = list(string.ascii_lowercase)
 ALPHABET = [letter.upper() for letter in ALPHABET]
 
@@ -271,12 +260,12 @@ while Time_Periods[0] != 0 and Time_Periods[4] != 5: #Possibly turn this into a 
 		Time_Periods[3] = str(Time_Periods[3])     #
 
 # Full Timers; FULL TIMERS; SHIFTS; ADP - All searchable hash tags to help find this later
-Full_Time_Closers = 8 #3
-Closers = 14 #Was 15 Before        
+Full_Time_Closers = 9 #3
+Closers = 10 #Was 14 Before        
 Closers = Closers + Full_Time_Closers
-Closers_Untill_11 = 9 #6
+Closers_Untill_11 = 12 #6
 #The Amount of people coming in with Regular Closing/Opening Shifts
-Leads = 5 #4              #Any Leads more than 7 is an error; 8 or more is an error
+Leads = 4 #4              #Any Leads more than 7 is an error; 8 or more is an error
 Leads_2 = Leads        #Will be needed later on
 #Lead shifts. Almost no different than Regular shifts except slightly different post (Floating, Radio, CHECKLIST etc)
 Breakers = 8 #8,anything over 9 is a bug  
@@ -612,7 +601,7 @@ print("B1 Regular Shift Rows: ", cell_count)
 
 
 extra_cell_count = 0
-extra_cell_count = Regular_Shift_Row_Counter(int(Locate('OB3')[0][1:]), 50, extra_cell_count)
+extra_cell_count = Regular_Shift_Row_Counter(int(Locate('OB3')[0][1:]), ws.max_row, extra_cell_count)
 print("OB3 Extra Regular Shift Rows: ", extra_cell_count)
 
 
@@ -634,6 +623,7 @@ B1_Full_Shift_Rows = 0
 #This var is brand new and unrelated to the comment above ^. That comment above is meant for the mini code right below.
 #This var will literally DETERMINE how many B1 Full Shift rows are on B1, thats INCLUDING Leads as well, not including 6 - 10's.
 
+'''
 if Ambassador > 22:
 	B1_Full_Shift_Rows = 15
 	Min_Ambassador = 9 # APRES ; OB3 Post; Was Originally 8 Before OB3 Momento was Added, Make it 9 for Better OB1 and OB2 Results. Currently only 8 to Force a bug so I can fix...
@@ -643,6 +633,31 @@ elif Ambassador < 20:
 elif Ambassador >= 20:
 	B1_Full_Shift_Rows = 12 #Most likely needs to be played around with, can prob increase or decrease later
 	Min_Ambassador = 5
+'''
+
+
+# --- DYNAMIC STAFFING DISTRIBUTION (ZERO-WASTE) ---
+# This ensures (B1 + OB1 + OB2) == Total Ambassadors. 
+# Physical OB3 rows will be 0, as those posts are now in the OB2/OB1 lists.
+
+# 1. Set B1 Priority (The Foundation)
+if Ambassador >= 33:
+    B1_Full_Shift_Rows = 18
+elif Ambassador >= 28:
+    B1_Full_Shift_Rows = 14
+else:
+    B1_Full_Shift_Rows = 13
+
+# 2. Calculate the Remaining Staff for Upstairs
+Upstairs_Pool = Ambassador - B1_Full_Shift_Rows
+
+# 3. Split the Pool between OB1 and OB2
+# We give OB2 the 'extra' person if the number is odd, 
+# because OB2 handles the OB3 overflow posts.
+Min_Ambassador_OB1 = Upstairs_Pool // 2 
+Min_Ambassador_OB2 = Upstairs_Pool - Min_Ambassador_OB1
+
+print(f"Logic Check: B1({B1_Full_Shift_Rows}) + OB1({Min_Ambassador_OB1}) + OB2({Min_Ambassador_OB2}) = {B1_Full_Shift_Rows + Min_Ambassador_OB1 + Min_Ambassador_OB2}")
 
 
 Move_To_B1 = int(Create_Balance[2][1:])
@@ -677,20 +692,20 @@ if Replacement_Rows > 0 and extra_cell_count > 0 and Replacement_Rows <= extra_c
 	Shift_Rows = sorted(Shift_Rows, key=custom_sort_key)
 
 
-
+'''
 cell_count_2 = 0
 cell_count_2 = Regular_Shift_Row_Counter(int(Locate('OB1')[0][1:]), int(Locate('OB2')[0][1:]), cell_count_2)
 # Print the cell count
 print("OB1 Regular Shift Rows: ", cell_count_2)
 
 extra_cell_count = 0
-extra_cell_count = Regular_Shift_Row_Counter(int(Locate('OB3')[0][1:]), 50, extra_cell_count)
+extra_cell_count = Regular_Shift_Row_Counter(int(Locate('OB3')[0][1:]), ws.max_row, extra_cell_count)
 print("OB3 Extra Regular Shift Rows: ", extra_cell_count)
 
 
 
 Move_To_OB1 = (int(Locate('OB1')[0][1:]) + 2)    #Move_To var's have to be an integer to represent the row number we will start with
-Replacement_Rows = (Min_Ambassador - cell_count_2)            #4 - 6 is the minimum amount required for this floor to flow properly
+Replacement_Rows = (Min_Ambassador_OB1 - cell_count_2)            #4 - 6 is the minimum amount required for this floor to flow properly
 #print (Move_To_OB1)
 if Replacement_Rows > 0 and extra_cell_count > 0 and Replacement_Rows <= extra_cell_count: #May need to add another and statement to make sure Replacement_Rows are less than extra_cell_count
 	ws.insert_rows(Move_To_OB1, Replacement_Rows)
@@ -742,7 +757,7 @@ print("OB3 Extra Regular Shift Rows: ", extra_cell_count)
 print ('Cell Count 3: ', cell_count_3)
 
 Move_To_OB2 = (int(Locate('OB2')[0][1:]) + 2)    #Move_To var's have to be an integer to represent the row number we will start with
-Replacement_Rows = (Min_Ambassador - cell_count_3)            #6 is the minimum amount required for this floor to flow properly
+Replacement_Rows = (Min_Ambassador_OB2 - cell_count_3)            #6 is the minimum amount required for this floor to flow properly
 #print (Move_To_OB2)
 if Replacement_Rows > 0 and extra_cell_count > 0 and Replacement_Rows <= extra_cell_count: #May need to add another and statement to make sure Replacement_Rows are less than extra_cell_count
 	ws.insert_rows(Move_To_OB2, Replacement_Rows)
@@ -780,6 +795,38 @@ if Replacement_Rows > 0 and extra_cell_count > 0 and Replacement_Rows <= extra_c
 	# Create a new sorted list using the custom sorting key to arrange every item in proper order
 	Create_Balance = sorted(Create_Balance, key=custom_sort_key)
 	Shift_Rows = sorted(Shift_Rows, key=custom_sort_key)
+
+'''
+
+# --- OB1 PHYSICAL BALANCE --- AI Assisted Version
+cell_count_2 = Regular_Shift_Row_Counter(int(Locate('OB1')[0][1:]), int(Locate('OB2')[0][1:]), 0)
+Move_To_OB1 = (int(Locate('OB1')[0][1:]) + 2)
+Replacement_Rows = (Min_Ambassador_OB1 - cell_count_2)
+
+if Replacement_Rows > 0:
+    ws.insert_rows(Move_To_OB1, Replacement_Rows)
+    # This pulls rows from the very bottom (OB3) and moves them to OB1
+    for i in range(Replacement_Rows):
+        ws.delete_rows(ws.max_row) 
+
+# --- OB2 PHYSICAL BALANCE ---
+cell_count_3 = Regular_Shift_Row_Counter(int(Locate('OB2')[0][1:]), int(Locate('OB3')[0][1:]), 0)
+Move_To_OB2 = (int(Locate('OB2')[0][1:]) + 2)
+
+if len(Lead_Rows) >= 5:
+	Replacement_Rows = ((Min_Ambassador_OB2 - 1) - cell_count_3)
+	#Basically tells the program to not delete the last row on OB3 if its a LEAD. This Lead count has to be accurate
+else:
+	Replacement_Rows = (Min_Ambassador_OB2 - cell_count_3)
+
+if Replacement_Rows > 0:
+    ws.insert_rows(Move_To_OB2, Replacement_Rows)
+    # This empties the rest of OB3
+    for i in range(Replacement_Rows):
+        ws.delete_rows(ws.max_row)
+
+
+
 
 
 #Used to fill the names in for any new rows that may have been created
@@ -844,9 +891,10 @@ for i in range(len(Shift_Rows)):
 
 
 
-
-
 #This function will be used to recount every shift lift, to recreate accuracy inside all shift list
+'''
+Old Code, can Delete later if it works
+
 def Recount(the_shift_list, char_to_look_for):
 	start_row = 5
 	end_row = 50
@@ -860,23 +908,47 @@ def Recount(the_shift_list, char_to_look_for):
 			the_shift_list.append((column_letter + str(row_number)))
 
 	return (the_shift_list)
+'''
+
+
+def Recount(the_shift_list, char_to_look_for):
+    start_row = 5
+    end_row = ws.max_row # Dynamically check every row created
+    column_letter = 'B'
+    for row_number in range(start_row, end_row + 1):
+        cell_value = ws[column_letter + str(row_number)].value
+        if cell_value and char_to_look_for in str(cell_value):
+            the_shift_list.append((column_letter + str(row_number)))
+    return (the_shift_list)
 
 
 #Reorganizing the list full of cordinates with accurate cordinates by looping through the B coulmn and searching for a specific character
+# --- MASTER SHIFT SYNC BLOCK ---
+# This wipes the old inaccurate lists and re-scans the Excel sheet
 Shift_Rows = []
-Shift_Rows = Recount(Shift_Rows, '12')
+Shift_Rows = Recount(Shift_Rows, '12') # Scans for 12:00 and 12:30/3:30
 
 Breaker_Rows = []
-Breaker_Rows = Recount(Breaker_Rows, '6')
+Breaker_Rows = Recount(Breaker_Rows, '6') # Scans for 6:00 Breakers
 
 Closer_11_Row = []
-Closer_11_Row = Recount(Closer_11_Row, '11')
+Closer_11_Row = Recount(Closer_11_Row, '11') # Scans for 11:00 Closers
 
 Lead_Rows = []
-Lead_Rows = Recount(Lead_Rows, 'LEAD')
+Lead_Rows = Recount(Lead_Rows, 'LEAD') # Scans for LEADS
+
+# Rebuild the 'Create_Balance' Master List
+# We use natsorted to ensure the coordinates are in order (A5, A6, A10, A11...)
+Create_Balance = natsorted(Shift_Rows + Breaker_Rows + Closer_11_Row + Lead_Rows)
 
 
-Create_Balance = [item for sublist in [Shift_Rows, Breaker_Rows, Closer_11_Row, Lead_Rows] for item in sublist]
+'''
+# Double Tap: Ensure Lead rows have the correct labels in Column D
+for i in Lead_Rows:
+    ws['D' + i[1:]].value = WORK_TIMES[3] # Sets it to 'LEAD'
+    ws['D' + i[1:]].fill = Blue
+    ws['D' + i[1:]].border = border
+    ws['D' + i[1:]].alignment = Center_Text
 
 
 #Will be used to update the row with Leads so we can then
@@ -901,6 +973,7 @@ for i in Lead_Rows:
 		ws[i].fill = Color_For_Lead_Shift
 		ws[i].border = border
 		ws[i].alignment = Center_Text
+'''
 
 # Loop through the rows where the list will be and adding 'Lead' text
 for i in range(len(Lead_Rows)):
@@ -1003,10 +1076,18 @@ wb.save(File_Name)
 
 print ('')
 print ('Updated All Shifts and Rows: ', Create_Balance)
-print ('Updated Regular Shift Rows: ', Shift_Rows)
+print (len(Create_Balance))
+
+#All Shifts that end at 12 are Shift - Rows
+print ('Updated Full Timers and Closer Rows: ', Shift_Rows)
+print (len(Shift_Rows)) 
 print ('Updated Lead Rows: ', Lead_Rows)
+print (len(Lead_Rows))
+print (Leads)
 print ('Updated Breaker Rows: ', Breaker_Rows)
+print (len(Breaker_Rows))
 print ('Updated Close Until 11 Rows: ', Closer_11_Row)
+print (len (Closer_11_Row))
 	
 
 
@@ -1014,11 +1095,19 @@ print ('Updated Close Until 11 Rows: ', Closer_11_Row)
 print ('Total Shifts: ', Total)
 print ('Total Cord Shifts: ', len(Create_Balance))
 
-print ('MIN GEA OB1/OB2: ', Min_Ambassador)
+# Change the old print line to this:
+print ('MIN GEA OB1: ', Min_Ambassador_OB1)
+print ('MIN GEA OB2: ', Min_Ambassador_OB2)
 print ('Ambassadors in Total: ', Ambassador)
 print ('IDEA: Have it do Column by Column and do Floor by Floor first')
 print ('Anything that cant fit, place into a seperate list attached to their Column Letter so we can hand them out later for anyone on OB3 or on other floors that have replaceable post')
 
+
+print ('')
+print (Ambassador)
+print ('End of Row Creation. Line 1113')
+wb.save(File_Name)
+sleep(0)
 
 #---------------------------------- Below is the Code to add Post in
 
@@ -1029,6 +1118,8 @@ Break_Times = ['J{eat_time}:K{eat_time}','J{eat_time}', 'K{eat_time}', 'L{eat_ti
 #eat_time will be replaced with the row number for the break time
 
 #Dictionary attaching time intervals with the letter column that best associate with that time.
+
+#Below is Before:
 Letter_Times = {
 	'3:30': 'D',
 	'4:00': 'E',
@@ -1051,6 +1142,30 @@ Letter_Times = {
 	'12:30': 'V'
 
 }
+
+#Should be the updated Version when the time is right
+'''
+Letter_Times = {
+	'3:00': 'D',
+	'3:30': 'E',
+	'4:00': 'F', 
+	'4:30': 'G',
+	'5:00': 'H',
+	'5:30': 'I',
+	'6:00': 'J',
+	'6:30': 'K',
+	'7:00': 'L',
+	'7:30': 'M',
+	'8:00': 'N', 
+	'8:30': 'O',
+	'9:00': 'P',
+	'9:30': 'Q',
+	'10:00': 'R',
+	'10:30': 'S',
+	'11:00': 'T',
+	'11:30': 'U',
+	'12:00': 'V'
+}'''
 
 Freight_Start = Letter_Times['7:30'] #This will be the column Freight officially starts. It should be purplish and have Freight Text
 Freight_End = Letter_Times['9:00']
@@ -1113,19 +1228,30 @@ But also will help us determine later on if we need a post covered on a differen
 B1_Floor_Rows = []      #Only a list for rows that go from 4 - 11 or 4 - 12 on B1
 #B1_Overall_Floor_Rows = [] #A list made up of Floor Rows including Breaker Shifts
 def FloorCellCount(column_letter, floorlist, end_row_floor, start_row_floor):
-	global Floor_Column_Count, Floor_OB1, Floor_OB2
+	global Floor_Column_Count, Floor_OB1, Floor_OB2, Leads
 	Floor_OB1 = [] #Will be used for OB1
 	Floor_OB2 = [] #Will be used for OB2
 	ignore_list = [EVERYTHING_ELSE[3], 'FREIGHT', 'PREP'] #Hasnt been used yet
 
 	Floor_Column_Count = 0  #Will be used to determine how many post we will need in this column..... HERE
 	start_row = start_row_floor #For B1 its the number 5
-	end_row = int(Locate(end_row_floor)[0][1:]) #Will have to make this a parameter - For B1 its 'OB1'
-	for i in range(start_row, end_row):
-		cell = ws[column_letter + str(i)]
-		#print ('Currently Reading Through: ', column_letter + str(i)) #Can delete when done as well - Add this string to our Logfile
-		#print (Locate('B1 BOH FREIGHT')) #Delete when done, kinda useless - If works well, make a list after breaks and freight is made and connect it to this function. it should be for all freight and break post
 
+	#end_row = int(end_row_floor) #int(Locate(end_row_floor)[0][1:]) #Will have to make this a parameter - For B1 its 'OB1'
+	
+	if end_row_floor.isdigit():
+        # If it's a number, use it directly
+		end_row = int(end_row_floor)
+	else:
+        # If it's a word, search for it
+		end_row = int(Locate(end_row_floor)[0][1:])
+
+
+
+
+
+	for i in range(start_row, end_row + 1):
+		cell = ws[column_letter + str(i)]
+		
 		''' Can be used as the solution later
 		# 1. Iterate through the merged cell ranges on the worksheet
 		is_merged = False
@@ -1158,7 +1284,7 @@ def FloorCellCount(column_letter, floorlist, end_row_floor, start_row_floor):
 		elif (cell.value) is None and (column_letter + str(i)) not in ws.merged_cells and start_row > int(Locate('B1')[0][1:]):
 			Floor_Column_Count += 1
 			floorlist.append(column_letter + str(i))
-			if i > int(Locate('OB2')[0][1:]) and i < int(Locate('OB3')[0][1:]): # Any rows thats on OB2 will be accounted for and added to the OB2 list
+			if i > int(Locate('OB2')[0][1:]): #Was here before:  and i < int(Locate('OB3')[0][1:]) | Any rows thats on OB2 will be accounted for and added to the OB2 list
 				Floor_OB2.append(column_letter + str(i))
 			elif i > int(Locate('OB1')[0][1:]) and i < int(Locate('OB2')[0][1:]): # Any rows thats on OB1 will be accounted for and added to the OB1 list
 				Floor_OB1.append(column_letter + str(i))
@@ -2307,6 +2433,14 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 	# Assign Floating Leads
 	for a in Leads_To_Float:
 		row_num = a[1:]
+
+		# NEW: Skip this lead if they are doing Freight in this column
+		current_cell = ws[column_letter + str(row_num)]
+		if current_cell.coordinate in ws.merged_cells:
+			# If the cell is merged, check if the merge contains the word 'FREIGHT'
+			# This prevents writing 'FLOAT' over 'FREIGHT'
+			if "FREIGHT" in str(Temporary_Value(current_cell.coordinate, current_cell.value)):
+				continue 
 		
 		# Identify current and previous columns
 		col_idx = ALPHABET.index(column_letter) # G is 6
@@ -2554,7 +2688,7 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 
 				Post_Tier += 1
 
-			wb.save(File_Name)
+			#wb.save(File_Name)
 
 
 			index = ALPHABET.index(Floor_B1_Create_Post_Cords[0][0])
@@ -3492,6 +3626,10 @@ print ('Testing Break Times... Line 3051')
 Freight_Cord = [] #Freight Cords will go here
 B1_Floor_Rows = []
 #The Row We Count From and The Row We End basically count all the rows we will consider for Freight, Amount of Freight Lines will represent how many will be created
+
+
+
+#------------- Updated Freight Funtion Below-----------------
 def Freight_Time(the_row_we_start_counting_from, the_row_we_will_end_row, amount_of_freight_lines):
 	global Freight_Used, Freight_Cord
 	Freight_Canidates = []
@@ -3505,37 +3643,101 @@ def Freight_Time(the_row_we_start_counting_from, the_row_we_will_end_row, amount
 		if Temporary_Value(Freight_Break_Check + str(i), cell.value) == EVERYTHING_ELSE[3] or Temporary_Value(Freight_Break_Check + str(i) ,cell.value) == 'PREP':
 			Freight_Canidates.append(Freight_Break_Check + str(i))
 
-#       Grabbing Breaker Shifts Only | 10:30 Has no correlation to 6 - 10:30's at all, and the value is just to make sure it only adds rows that are TRUE to such value.
+		#Grabbing Breaker Shifts Only | 10:30 Has no correlation to 6 - 10:30's at all, and the value is just to make sure it only adds rows that are TRUE to such value.
 		if Temporary_Value(Freight_Break_Check + str(i) ,cell.value) is None and ws[Letter_Times['10:30'] + str(i)].value == 'SKIP':
 			Freight_Canidates.append(Freight_Break_Check + str(i))
-#		Any Shift is Eligble for FREIGHT due to the elif statement below; Comment out if want it to choose only Breaker shifts
+		#Any Shift is Eligble for FREIGHT due to the elif statement below; Comment out if want it to choose only Breaker shifts
 		elif Temporary_Value(Freight_Break_Check + str(i) ,cell.value) == 'PREP' and ws[Letter_Times['10:30'] + str(i)].value == None or Temporary_Value(Freight_Break_Check + str(i) ,cell.value) == 'BREAK' and ws[Letter_Times['10:30'] + str(i)].value == None:
 			Freight_Canidates.append(Freight_Break_Check + str(i))
 
 		#ws[Letter_Times['10:30'] is Pulled from a dictionary above, where the time represents a letter. The if statement above is creating a Cordinate to check for
 	
+	random.shuffle(Freight_Canidates)
 	print ('Freight Canidates: ', Freight_Canidates)
-	#sleep(0) #Most likely printing none because cell value for if statement 2148 is coming out as none
+	print ('')
 
 
 	Freight_Canidates = list(set(Freight_Canidates)) #Cleaning the list for any duplicates!
+
+	# --- LEAD RESCUE LOGIC (No try/except) ---
+	ob1_limit = int(Locate('OB1')[0][1:])
+	is_upstairs_mode = amount_of_freight_lines > 1
+	
+	# 1. Identify leads for the current floor
+	if is_upstairs_mode:
+		leads_on_floor = Leads_Upstairs
+	else:
+		leads_on_floor = [ld for ld in Lead_Rows if int(ld[1:]) < ob1_limit]
+
+	# 2. Check if a lead is already in the candidates pool
+	lead_in_pool = False
+	for cand in Freight_Canidates:
+		if any(cand[1:] == ld[1:] for ld in leads_on_floor):
+			lead_in_pool = True
+			break
+
+	# 3. If no lead is free, find one on break and move them
+	if not lead_in_pool and len(leads_on_floor) > 0:
+		target_lead = leads_on_floor[0]
+		target_row = target_lead[1:]
+		
+		# Find all breaks currently on the sheet
+		break_coords = Locate('BREAK')
+		
+		if break_coords:
+			for b_coord in break_coords:
+				# Match the break coordinate to the target lead's row
+				if b_coord[1:] == target_row:
+					current_b_col = b_coord[0]
+					
+					# Identify the range to unmerge (breaks are 2 cells wide)
+					# Find the specific merged range object to avoid errors
+					for m_range in list(ws.merged_cells.ranges):
+						if b_coord in m_range:
+							ws.unmerge_cells(str(m_range))
+					
+					# Empty the cell and clear color
+					ws[b_coord].value = None
+					ws[b_coord].fill = PatternFill(fill_type=None)
+					
+					# Choose a new break slot (Swap J to N, or L to J)
+					new_b_col = 'N' if current_b_col == 'J' else 'J'
+					new_col_idx = ALPHABET.index(new_b_col) + 1
+					new_break_range = f"{new_b_col}{target_row}:{ALPHABET[new_col_idx]}{target_row}"
+					
+					# Create the new break on the same row
+					Create_Post(new_break_range, int(target_row), new_col_idx, 'BREAK')
+					ws[new_b_col + target_row].fill = PatternFill(patternType='solid', fgColor=BREAK)
+					
+					# Add the now-available lead row to candidates
+					Freight_Canidates.append(Freight_Break_Check + target_row)
+					print ('')
+					print(f"Moved Lead Break from {current_b_col} to {new_b_col} for Row {target_row}")
+					print ('')
+					break
+
+
+
+
+
 	while Freight_Used != Freight_Lines_Needed:
 		end_it_all = 0 #Helps ends both for loops down below
-		random.shuffle(Freight_Canidates)
 
 		#Choosing Lead for Freight: The meaning of this for Loop and if Statement is to give Leads first priority of Counter during Freight, only if they're in the Freight Canidates list. Can be commented out
-		if (Freight_Used + 1) == 4:
+		#if (Freight_Used + 1) == 4:
+		if Freight_Used == 1 or Freight_Lines_Needed == 1: # Ensures we choose a Lead for both B1 and Upstairs for BOH and Counter Freight
 			for i in Freight_Canidates:
 				for a in Lead_Rows:
 					if i[1:] == a[1:]:
 						Freight_Canidates.insert(0, i)
 						#Add a pop here; not really needed
-						print ('Giving Lead Freight Counter...', i)
+						print ('Giving Lead Freight...', i)
 						#print (Freight_Canidates)
 						end_it_all += 1
 						break
 				if end_it_all == 1:
 					break
+		
 		elif (Freight_Used + 1) < 4:
 			for i in Lead_Rows:
 				for a in Freight_Canidates[:3]:
@@ -3543,6 +3745,7 @@ def Freight_Time(the_row_we_start_counting_from, the_row_we_will_end_row, amount
 						random.shuffle(Freight_Canidates)
 						print ('Preserving Freight for Counter', i)
 						#Can potentially add a mini while loop to shuffle until that lead row isnt in index 0 but the odds of it still being their is close to none
+		
 
 		index = ALPHABET.index(Freight_Start)
 		index += 1
@@ -3552,25 +3755,26 @@ def Freight_Time(the_row_we_start_counting_from, the_row_we_will_end_row, amount
 		if int(Freight_Canidates[0][1:]) > int(Locate('OB1')[0][1:]): #Basically tells it to start from index 1 in the FREIGHT list so we dont reprint B1 FREIGHT
 			Create_Post(Freight_Cells, int(Freight_Canidates[0][1:]), index, FREIGHT[Freight_Used + 1]) 
 			Freight_Cord.append(Freight_Cells)
-			#if 'COUNTER' in FREIGHT[Freight_Used + 1]:
-			#	print ('Freight Used Counter Count: ', Freight_Used + 1)
-			#	sleep(999)
-			#print (Freight_Canidates)
-			#print (Freight_Canidates[0], FREIGHT[Freight_Used + 1], len(Freight_Canidates))
+			print ('Freight Created: ', FREIGHT[Freight_Used + 1])
+			print (Freight_Cells)
 		elif int(Freight_Canidates[0][1:]) < int(Locate('OB1')[0][1:]):
 			Create_Post(Freight_Cells, int(Freight_Canidates[0][1:]), index, FREIGHT[Freight_Used])
 			Freight_Cord.append(Freight_Cells)
+			print ('Freight Created: ', FREIGHT[Freight_Used])
+			print (Freight_Cells)
 			
 		Freight_Used += 1 #It will keep accurate count of which Freight Line is next in the list.
 		Freight_Canidates.remove(Freight_Canidates[0])
+		wb.save(File_Name)
+		print ('Freight Used: ', Freight_Used)
 
 	return (Freight_Cord)
+
+
 	
 
 #Freight List is properly created. Randomize it then create post for Freight
 Freight_Time(5, int(Locate('OB1')[0][1:]), 1)
-
-
 
 B1_Floor_Rows = []
 FloorCellCount('J', B1_Floor_Rows, 'OB1', 5)
@@ -3582,7 +3786,7 @@ FloorCellCount('L', B1_Floor_Rows, 'OB1', 5)
 B1_Rotations_Creation_Updated('M', 12)
 
 
-
+wb.save(File_Name)
 B1_Floor_Rows = []
 FloorCellCount('N', B1_Floor_Rows, 'OB1', 5)
 B1_Rotations_Creation_Updated('O', 14)
@@ -3842,7 +4046,7 @@ Every_Full_Shift_Upstairs_Rows = []
 
 for i in All_Shifts_Rows:
 	if i in Lead_Rows: #Only looking for Leads on OB1 and OB2
-		if int(i[1:]) > OB1_Cordinate and int(i[1:]) < OB3_Cordinate:
+		if int(i[1:]) > OB1_Cordinate:
 			Leads_Upstairs.append(i)
 
 	if i in Shift_Rows:
@@ -3851,11 +4055,82 @@ for i in All_Shifts_Rows:
 
 	if int(i[1:]) > OB1_Cordinate:
 		Every_Full_Shift_Upstairs_Rows.append(i)
+
 			
 
 
 #Creating Breaks for every Full Shift upstairs
 BreakTime('J', Every_Full_Shift_Upstairs_Rows)
+
+All_Breaks = Locate('BREAK')
+All_Upstairs_Leads_Breaks = []
+Break_Col = ['J', 'L', 'N']
+random.shuffle(Break_Col)
+
+
+for i in Locate('LEAD'):
+	for a in All_Breaks:
+		if a[1:] == i[1:] and int(i[1:]) > int(Locate('OB1')[0][1:]):
+			All_Upstairs_Leads_Breaks.append(a)
+
+
+
+# Making seeperate breaks for 2 or more Leads on the Same Floor
+if len(All_Upstairs_Leads_Breaks) > 1:
+	if All_Upstairs_Leads_Breaks and all(''.join(filter(str.isalpha, c)) == ''.join(filter(str.isalpha, All_Upstairs_Leads_Breaks[0])) for c in All_Upstairs_Leads_Breaks):
+		print('')
+		print ('Before: ', All_Upstairs_Leads_Breaks)
+		print ('Same Break Time..... Fixing')
+
+		Old_Break = All_Upstairs_Leads_Breaks[1]
+		#Current Break Cord we are aiming to remove
+
+		Break_Col.remove(All_Upstairs_Leads_Breaks[1][0])
+		#Removing the Column Letter from the list of Break letters to avoid remaking the same break we are currently erasing.
+
+		New_Break = Break_Col[0] + All_Upstairs_Leads_Breaks[1][1:]
+		#New Break Cordinate is remade as a string
+
+		# Reset the fill (this removes the color)
+		no_fill = PatternFill(fill_type=None)
+
+		# Apply to the primary cell (A1) and clear its value
+		ws[Old_Break].fill = no_fill
+		ws[Old_Break].value = None
+
+
+		# Unmerge the cells
+		# Get the cell to the immediate RIGHT (0 rows down, 1 column right)
+		cell_to_right = ws[Old_Break].offset(row=0, column=1)
+
+		#Unmerging the combined cells for the old break Cordinate
+		ws.unmerge_cells(Old_Break + ':' + cell_to_right.coordinate)
+
+		# Creating the new Break Cell
+		New_Break_Right_Cell = ws[New_Break].offset(row=0, column=1)
+		New_Break_Right_Cell = New_Break_Right_Cell.coordinate
+		New_Break_Merge = New_Break + ':' + New_Break_Right_Cell
+
+		index = ALPHABET.index(New_Break_Merge[0]) + 1 # Added + 1 here
+
+		BREAK_CELL = PatternFill(patternType = 'solid', fgColor = BREAK)
+		ws[New_Break].fill = BREAK_CELL
+		Create_Post(New_Break_Merge, int(i[1:]), index, 'BREAK') # Uses the adjusted index
+		ws[New_Break].value = 'BREAK'
+		ws[New_Break].alignment = Alignment(horizontal='centerContinuous')
+
+		All_Breaks.remove(Old_Break)
+		All_Upstairs_Leads_Breaks.remove(Old_Break)
+		All_Breaks.append(New_Break)
+		All_Upstairs_Leads_Breaks.append(New_Break)
+		print ('After: ', All_Upstairs_Leads_Breaks)
+
+		wb.save(File_Name)
+
+
+
+
+
 
 
 #--------------------Create and Checking for RADIO POST
@@ -3885,11 +4160,12 @@ if Radio_Post_Found == 0 and len(Leads_Upstairs) > 0:
 
 
 #Creating OB1 and OB2 Fright Post
-Freight_Time(int(Locate('OB1')[0][1:]), int(Locate('OB3')[0][1:]), 3) #Changed from 4 to 3
+Freight_Time(int(Locate('OB1')[0][1:]), int(ws.max_row) + 1, 3) #Changed from 4 to 3
 
 
 
-wb.save(File_Name)
+
+
 
 
 
@@ -4008,9 +4284,13 @@ print ('')
 
 # Loop through the list
 for cell in BREAKS_UPSTAIRS:
-	if cell not in BREAKS_THAT_CANT_MOVE:
+
+	# Determine if this break belongs to a 4-11 shift
+    is_4_11 = any(cell[1:] == closer[1:] for closer in Closer_11_Row)
+    
+    # Only erase if it's NOT a 4-11 and NOT a fixed freight break
+    if cell not in BREAKS_THAT_CANT_MOVE and not is_4_11:
 	    # Unmerge the cell if it's part of a merged cell range
-	    #for merged_cell in ws.merged_cells.ranges: #Delete this later if the below code ends up working
 	    for merged_cell in list(ws.merged_cells.ranges):
 	        if cell in str(merged_cell):
 	            ws.unmerge_cells(str(merged_cell))
@@ -4021,18 +4301,31 @@ for cell in BREAKS_UPSTAIRS:
 	    # Remove the fill color (set it to 'None' or a transparent fill)
 	    ws[cell].fill = PatternFill(start_color="FFFFFF", end_color="FFFFFF", fill_type=None)
 
-wb.save(File_Name)
-print ('Breaks Have Been Cleared!')
+
 
 #This var will hold the value of the amount of breaks thats needed upstairs
 Amount_Of_Breaks_To_Issue_Upstairs = 0
 
 Avoid_Repeated_Cords = []
 #Some cords repeat for some odd reason.... we will add them here... or Possibly clean the list for duplicates at some point
+
+''' Old
 for i in All_Shifts_Rows:
 	if int(i[1:]) > int(Locate('OB1')[0][1:]) and int(i[1:]) < int(Locate('OB3')[0][1:]) and all(i[1:] not in item for item in Breaker_Rows) and i not in Avoid_Repeated_Cords and all(i[1:] not in item for item in BREAKS_THAT_CANT_MOVE):
 		Amount_Of_Breaks_To_Issue_Upstairs += 1
 		Avoid_Repeated_Cords.append(i)
+'''
+
+for i in All_Shifts_Rows:
+    # NEW: Check if this shift is a 4-11
+	is_4_11 = any(i[1:] == closer[1:] for closer in Closer_11_Row)
+    
+    # ADDED 'and not is_4_11' to the condition below
+	if int(i[1:]) > int(Locate('OB1')[0][1:]) and int(i[1:]) < int(Locate('OB3')[0][1:]) and all(i[1:] not in item for item in Breaker_Rows) and i not in Avoid_Repeated_Cords and all(i[1:] not in item for item in BREAKS_THAT_CANT_MOVE) and not is_4_11:
+		Amount_Of_Breaks_To_Issue_Upstairs += 1
+		Avoid_Repeated_Cords.append(i)
+
+
 
 print ('Upstairs Breaks Needed: ', Amount_Of_Breaks_To_Issue_Upstairs)
 print ('When we re make breaks, start with lines that have freight first, then subtrace from that list of cords that need break. dont think we made it so include it in the loop above')
@@ -4059,10 +4352,22 @@ Rows_That_Need_A_Break = []
 #This will be a list of rows that need a break upstairs. Should include row numbers only
 
 # Loop through the cells in the column from start_row to end_row
+
+''' Old
 for row in range(start_row + 1, end_row):
     if all(str(row) not in item for item in BREAKS_THAT_CANT_MOVE) and all(str(row) not in item for item in Breaker_Rows):
     	Rows_That_Need_A_Break.append(str(row))
     	#Capturing every Row/Line that still needs a break
+'''
+
+
+for row in range(start_row + 1, end_row):
+    # Skip Freight breaks, Breakers, AND 4-11 shifts
+	is_4_11 = any(str(row) == closer[1:] for closer in Closer_11_Row)
+	if all(str(row) not in item for item in BREAKS_THAT_CANT_MOVE) and all(str(row) not in item for item in Breaker_Rows) and not is_4_11:
+		Rows_That_Need_A_Break.append(str(row))
+    	#Capturing every Row/Line that still needs a break
+
 
 print ('Rows that still need a Break: ', Rows_That_Need_A_Break)
 
@@ -4120,6 +4425,8 @@ while Amount_Of_Breaks_To_Issue_Upstairs != 0:
 #Before Creating Breaks below, maybe swap out some of the j column breaks with other letters? or have it count which letter has the most breaks an then do swap outs
 
 
+
+
 #Creating the Breaks Down Below
 for i in Breaks_Given:
 
@@ -4139,9 +4446,6 @@ for i in Breaks_Given:
 
 
 
-
-
-
 # Output the results
 for i, lst in enumerate(All_Free_Rows_List, start=1):
 	print(f"List {i}: {lst} (Length: {len(lst)})")
@@ -4150,17 +4454,9 @@ print ('Breaks Given: ', Breaks_Given)
 
 
 
-
-
-
-
-
-
-
-
-
-
-
+wb.save(File_Name)
+print ('Check the Breaks 2: Line 4428')
+#sleep(99999)
 
 
 
@@ -4420,8 +4716,11 @@ def Upper_Floor_Rotation_Creation_OB1():
 
 													
 
-													Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
+													#Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
 													#Will be used to check inside of all the list inside Relieved Post list of list and see if that post is already accounted for
+													source_cord_to_check = Letter_Next_To_1 + Floor_Cords[1:]
+													Has_Post_Been_Relieved = source_cord_to_check in Relieved_Cords
+
 
 													#Was Here Last!!!!!!!!!!!!!11 - Delete Later
 													cell2 = Temporary_Value(Floor_Cords, cell2)
@@ -5280,7 +5579,11 @@ def Upper_Floor_Rotation_Creation_OB2():
 
 												
 
-												Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
+												#Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
+
+												# Fixed: No generator/any() to avoid scoping errors
+												source_cord_to_check = Letter_Left_To + Floor_Cords[1:]
+												Has_Post_Been_Relieved = source_cord_to_check in Relieved_Cords
 												#Will be used to check inside of all the list inside Relieved Post list of list and see if that post is already accounted for
 
 												#Was Here Last!!!!!!!!!!!!!11 - Delete Later
@@ -5590,11 +5893,13 @@ def Upper_Floor_Rotation_Creation_OB2():
 
 
 
-Borrowed_From_B1_Post = 0
+Borrowed_From_B1_Post = 0 #7/24/26 We can delete any existence of this var when the time is right. No longer use it.
 '''
 #-b1relief
 This var was created for the purposes of the function below. Sometimes we will use a Post/Cord from B1 and this var will be used as a Global Var indicator to tell the program that we used a B1 Post in the previous hour.
 '''
+
+
 
 
 #-------------------------Creating a OB1 and OB2 Check and Balance Function....
@@ -5609,13 +5914,37 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 	#This list will contain cords that are only important for relief when checking rotations. A bit different than the regular OB1_OB2 original list. I will count 'NONE' cells as well as cells that have a BREAK. Should not be used for Post creation since it may overwrite some breaks
 	#Do not use for Post Creation
 
+	'''
+	breakerninefix = Name of the comments where all the breaker's leaving at 9:30 or half an hour rotation, solution code will be. 
+	Delete it all and the code will work just fine. Code below
+	'''
+	if OB1_OB2_Floor_Rows[0][0] == 'P':
+		print ('Before: ', OB1_OB2_Floor_Rows)
+		OB1_Row_Num = int(Locate('OB1')[0][1:])
+		Upstairs_Breaker_Shifts_Cords = []
+		for a in OB1_OB2_Floor_Rows:
+			for i in Locate('6pm-10:30pm'):
+				if i[1:] == a[1:]:
+					Upstairs_Breaker_Shifts_Cords.append(a)
+		Upstairs_Breaker_Shifts_Cords = set(Upstairs_Breaker_Shifts_Cords)
+		OB1_OB2_Floor_Rows[:] = [item for item in OB1_OB2_Floor_Rows if item not in Upstairs_Breaker_Shifts_Cords]
+		print ('After: ' , OB1_OB2_Floor_Rows)
+		print ('Remove Breaker Shifts or Place them in a seperate list since they leave at 9:30')
+		print (Locate('6pm-10:30pm'))
+		wb.save(File_Name)
+		#sleep(99999)
+
 	if Borrowed_From_B1_Post != 0:
 		OB1_OB2_Floor_Rows_Relief_List.append(OB1_OB2_Floor_Rows[0][0] + Borrowed_From_B1_Post)
 		ROTATION_STARTERS.extend(Mix_Of_Both_B1_Tiers)
 
 		Borrowed_From_B1_Post = 0 
 		#Resetting the Global Var back to 0 so it doesn't stop here when the function is used again..
+		#Can delete this var completely at some point. No longer being used. Actually being replaced
 		#-b1relief
+
+	Using_Celebrate_From_B1 = 0
+	# We will use this var later to let the code know not to remove CAB 2 if we borrowed from Celebrate on B1, or are using the PREP Post instead.
 
 
 
@@ -5784,6 +6113,9 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 		#PURPOSE OF IF Statements: They determine whether leads get float post or ambassador like lines as well as choosing what cells get a post
 		#Must include Freight Post into this math. Will add FreightPostNow var
+		#Delete Large Code Below
+
+		'''
 		if len(OB1_OB2_Floor_Rows) - FreightPostNow == Upstairs_Min_Length + len(Free_Leads_Upstairs) and len(Free_Leads_Upstairs) == 1:
 			#-reference
 
@@ -5922,14 +6254,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 						OB1_OB2_Floor_Rows_Relief_List.append(B1_Post_To_Borrow[0])
 
 						Mix_Of_Both_B1_Tiers.append('PREP') 
-						'''
-						Lazy Coding... Can delete later when we re-do B1. 
-						For some odd reason Prep isn't recognized as a Post Starter on my OB1/PB2 Check and Balance Algorithm when ever we use this 
-						if statement to grab a B1 Post... so I wrote this in..
+						
+						#Lazy Coding... Can delete later when we re-do B1. 
+						#For some odd reason Prep isn't recognized as a Post Starter on my OB1/PB2 Check and Balance Algorithm when ever we use this 
+						#if statement to grab a B1 Post... so I wrote this in..
 
-						Mix_Of_Both_B1_Tiers isnt used anymore anyway when the program even makes it this far and also it isnt a global var/list so it will reset after this 
-						function is over with
-						'''
+						#Mix_Of_Both_B1_Tiers isnt used anymore anyway when the program even makes it this far and also it isnt a global var/list so it will reset after this 
+						#function is over with
+						
 						
 						ROTATION_STARTERS.append('B1 BOH FREIGHT')
 						#Adding B1 FREIGHT to the main ROTATION STARTER list bugs B1 for some reason..... Will fix when I recode B1
@@ -6113,10 +6445,10 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 		elif len(OB1_OB2_Floor_Rows) - FreightPostNow < Upstairs_Min_Length: 
 			#-reference
-			'''
-			This if Statement will capture the program if their isnt enough open cells on OB1 and OB2 to fill for every upstairs Tier1 Post
-			and we are low on ambassadors to the point where no one can start a rotation
-			'''
+			
+			#This if Statement will capture the program if their isnt enough open cells on OB1 and OB2 to fill for every upstairs Tier1 Post
+			#and we are low on ambassadors to the point where no one can start a rotation
+			
 			
 			if len(OB1_OB2_Floor_Rows) - FreightPostNow == Upstairs_Min_Length - 1:
 				print ('This if Statement will build out the rotations if its just 1 less than the Upstairs Minimum... ')
@@ -6201,14 +6533,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 							OB1_OB2_Floor_Rows_Relief_List.append(B1_Post_To_Borrow[0])
 
 							Mix_Of_Both_B1_Tiers.append('PREP') 
-							'''
-							Lazy Coding... Can delete later when we re-do B1. 
-							For some odd reason Prep isn't recognized as a Post Starter on my OB1/PB2 Check and Balance Algorithm when ever we use this 
-							if statement to grab a B1 Post... so I wrote this in..
+							
+							#Lazy Coding... Can delete later when we re-do B1. 
+							#For some odd reason Prep isn't recognized as a Post Starter on my OB1/PB2 Check and Balance Algorithm when ever we use this 
+							#if statement to grab a B1 Post... so I wrote this in..
 
-							Mix_Of_Both_B1_Tiers isnt used anymore anyway when the program even makes it this far and also it isnt a global var/list so it will reset after this 
-							function is over with
-							'''
+							#Mix_Of_Both_B1_Tiers isnt used anymore anyway when the program even makes it this far and also it isnt a global var/list so it will reset after this 
+							#function is over with
+							
 							
 							ROTATION_STARTERS.append('B1 BOH FREIGHT')
 							#Adding B1 FREIGHT to the main ROTATION STARTER list bugs B1 for some reason..... Will fix when I recode B1
@@ -6402,12 +6734,349 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				sleep(99999)
 			#sleep(99999)
 			#Length += 3 Can delete later. Think this is supposed to be FlLength var
-
+		'''
+		#Delete Large Code Above
+		# --- STAFFING HIERARCHY & LEAD PROTECTION LOGIC ---
+	
+		# Initial Count: GSAs (non-leads) vs Mandatory Tier 1 Requirements
+		GSAs_Available = len(OB1_OB2_Floor_Rows) - len(Free_Leads_Upstairs)
+		Tier1_Requirement = len(OB1_Tier_1) + len(OB2_Tier_1)
 		
+		# Shortage > 0 means we are missing bodies for Tier 1
+		#Shortage = Tier1_Requirement - GSAs_Available
+
+		Leads_To_Work = []
+		Leads_To_Float = []
 
 
-		#sleep(99999)
+		#Freight Accuracy is needed for the 2nd if Statement. May possibly delete it out of the first if statement overall at some point.
+		current_col = OB1_OB2_Floor_Rows[0][0]
+		Freight_Rider_Cords = []
+		Freight_Census = 0
+		
+		# Census: Find existing Freight upstairs for this hour
+		for r in range(int(Locate('OB1')[0][1:]) + 1, int(Locate('OB3')[0][1:])):
+			cv = Temporary_Value(current_col + str(r), ws[current_col + str(r)].value)
+			if cv and 'FREIGHT' in str(cv):
+				Freight_Census += 1
+				if 'RIDER' in str(cv): Freight_Rider_Cords.append(current_col + str(r))
+
+		# Shortage > 0 means we are missing bodies for Tier 1
+		Shortage = Tier1_Requirement - (GSAs_Available - Freight_Census)
+		print (f'Tier 1 Requirement for Upstairs is {Tier1_Requirement} and out of the GSAs that are Free which would be {GSAs_Available}, a few are assigned to Freight: {Freight_Census}')
+
+
+
+		# 1. PRIORITY 1: SACRIFICE FREIGHT (MIN 3 POLICY)
+		if Shortage > 0:
+			current_col = OB1_OB2_Floor_Rows[0][0]
+			Freight_Rider_Cords = []
+			Freight_Census = 0
 			
+			# Census: Find existing Freight upstairs for this hour
+			for r in range(int(Locate('OB1')[0][1:]) + 1, int(Locate('OB3')[0][1:])):
+				cv = Temporary_Value(current_col + str(r), ws[current_col + str(r)].value)
+				if cv and 'FREIGHT' in str(cv):
+					Freight_Census += 1
+					if 'RIDER' in str(cv): Freight_Rider_Cords.append(current_col + str(r))
+
+			print(f"HIERARCHY 1: Freight Census is {Freight_Census}. Shortage is {Shortage}.")
+			
+			# Draft Riders only if we have a luxury (Census > 3)
+			while Shortage > 0 and Freight_Census > 3 and len(Freight_Rider_Cords) > 0:
+				target_f = Freight_Rider_Cords.pop()
+				# Clean cell for new assignment
+				for mr in list(ws.merged_cells.ranges):
+					if target_f in mr: ws.unmerge_cells(str(mr))
+				ws[target_f].value = None
+				ws[target_f].fill = PatternFill(fill_type=None)
+				
+				OB1_OB2_Floor_Rows.append(target_f) # Add body to pool
+				Freight_Census -= 1
+				Shortage -= 1
+				print(f"ACTION: Sacrificed Freight Rider at {target_f}. Shortage now {Shortage}.")
+
+		# 2. PRIORITY 2: SURGICAL LEAD DRAFTING
+		if Shortage <= 0:
+			# Staffing resolved by GSAs or Freight: All Leads FLOAT
+			Leads_To_Float = Free_Leads_Upstairs
+			Leads_To_Work = []
+			print(f"HIERARCHY 2: Staffing Healthy. All {len(Leads_To_Float)} Leads will FLOAT.")
+			print (Shortage)
+		else:
+			 # Draft exactly the number of Leads we need to cover the shortage
+			Leads_To_Work = Free_Leads_Upstairs[:Shortage]  # These stay in the pool
+			Leads_To_Float = Free_Leads_Upstairs[Shortage:] # These get FLOAT now
+
+		# ACTION: Physically assign FLOAT to the floaters and kick them out of the pool
+		for lead_cord in Leads_To_Float:
+			col_idx = ALPHABET.index(lead_cord[0]) + 1
+		    # Check if we need a 1-cell or 2-cell merge (Column R is the end of shift)
+			m_limit = 2 if lead_cord[0] == 'R' else 1
+			Cell_Range = lead_cord + ':' + ALPHABET[col_idx + m_limit - 1] + lead_cord[1:]
+		    
+		    # 1. Assign the FLOAT text and color
+			Create_Post(Cell_Range, int(lead_cord[1:]), col_idx, EVERYTHING_ELSE[0])
+			ws[lead_cord].fill = PatternFill(patternType='solid', fgColor=FLOAT)
+		    
+		    # 2. REMOVE them from the pool so the script doesn't give them a Tier 1 job later
+			if lead_cord in OB1_OB2_Floor_Rows:
+				OB1_OB2_Floor_Rows.remove(lead_cord)
+
+		# Now Shortage is effectively 0 because the drafted leads are still in OB1_OB2_Floor_Rows
+		Shortage = 0
+
+
+		'''
+		May Delete Later
+		else:
+			# Still short: Draft only enough Leads to cover the gap
+			if Shortage <= len(Free_Leads_Upstairs):
+				print ('Current Shortage Before: ', Shortage)
+				Leads_To_Work = Free_Leads_Upstairs[-Shortage:] # Take from bottom
+				Leads_To_Float = Free_Leads_Upstairs[:-Shortage] # Rest stay floating
+				print(f"HIERARCHY 2: Drafting {len(Leads_To_Work)} Lead(s). {len(Leads_To_Float)} stay Floating.")
+				Shortage = 0 
+			else:
+				# Critical: All leads drafted, shortage remains
+				Leads_To_Work = Free_Leads_Upstairs
+				Leads_To_Float = []
+				Shortage = Shortage - len(Leads_To_Work)
+				print(f"HIERARCHY 2: ALL Leads drafted. Still missing {Shortage} people.")
+			'''
+
+
+
+		# --- HIERARCHY 3: B1 PREP-SWAP & CELEBRATE SACRIFICE ---
+		if Shortage > 0: #REMINDER: Can use this to host more upstairs post if we have more preps avaliable
+			
+			current_col = OB1_OB2_Floor_Rows[0][0]
+			col_idx = ALPHABET.index(current_col)
+			next_col = ALPHABET[col_idx + 1]
+			b1_start_row = 5
+			b1_end_row = int(Locate('OB1')[0][1:])
+			print(f"HIERARCHY 3: Detecting B1 Preps for hour block {current_col}/{next_col}...")
+			
+			prep_first_staff = [] # List of rows doing [PREP, BREAK]
+			break_first_staff = [] # List of rows doing [BREAK, PREP]
+
+			# 1. PHYSICAL SCAN: Identify all staff involved in PREP rotations this hour
+			for r in range(b1_start_row, b1_end_row):
+				cell1_val = Temporary_Value(current_col + str(r), ws[current_col + str(r)].value)
+				cell2_val = Temporary_Value(next_col + str(r), ws[next_col + str(r)].value)
+
+				if cell1_val == 'PREP' and cell2_val == 'BREAK':
+					prep_first_staff.append(str(r))
+				elif cell1_val == 'BREAK' and cell2_val == 'PREP':
+					break_first_staff.append(str(r))
+
+			# --- REBALANCE AND SELECTION LOGIC ---
+			if len(prep_first_staff) >= 1 and len(break_first_staff) >= 1:
+				# Scenario: We have both. No swap needed.
+				# Row A covers 1st half, Row B covers 2nd half.
+				all_prep_rows = [prep_first_staff[0], break_first_staff[0]]
+
+			elif len(prep_first_staff) >= 2:
+				# Scenario: All Prep-First. Swap the 2nd person to Break-First.
+				target_row = prep_first_staff[1]
+				row_int = int(target_row)
+				
+				# Physically swap them on the Excel sheet: [BREAK -> PREP]
+				Create_Post(current_col + target_row, row_int, col_idx + 1, 'BREAK')
+				ws[current_col + target_row].fill = PatternFill(patternType='solid', fgColor=BREAK)
+				Create_Post(next_col + target_row, row_int, col_idx + 2, 'PREP')
+				ws[next_col + target_row].fill = PatternFill(patternType='solid', fgColor=PREP)
+				
+				# Now person 0 covers 1st half, person 1 covers 2nd half.
+				all_prep_rows = [prep_first_staff[0], target_row]
+				print(f"HIERARCHY 3: Rebalanced Row {target_row} to BREAK-First for coverage.")
+
+			elif len(break_first_staff) >= 2:
+				# Scenario: All Break-First. Swap the 2nd person to Prep-First.
+				target_row = break_first_staff[1]
+				row_int = int(target_row)
+
+				# Physically swap them on the Excel sheet: [PREP -> BREAK]
+				Create_Post(current_col + target_row, row_int, col_idx + 1, 'PREP')
+				ws[current_col + target_row].fill = PatternFill(patternType='solid', fgColor=PREP)
+				Create_Post(next_col + target_row, row_int, col_idx + 2, 'BREAK')
+				ws[next_col + target_row].fill = PatternFill(patternType='solid', fgColor=BREAK)
+
+				# Now person 1 covers 1st half, person 0 covers 2nd half.
+				all_prep_rows = [target_row, break_first_staff[0]]
+				print(f"HIERARCHY 3: Rebalanced Row {target_row} to PREP-First for coverage.")
+			else:
+				# Low staff fallback
+				all_prep_rows = prep_first_staff + break_first_staff
+				if len(all_prep_rows) >= 2:
+					all_prep_rows = all_prep_rows[0:2]
+
+			print(f"DEBUG: Found {len(prep_first_staff)} Prep-First and {len(break_first_staff)} Break-First staffers.")
+
+			# 2. COVERAGE CHECK & SCHEDULE FLIP
+			# We need at least 2 people in the Prep pool to sacrifice a Celebrate staffer safely.
+			if len(all_prep_rows) >= 2:
+				# If everyone is taking a break at the same time (e.g., everyone is Prep-First)
+				# we flip one person to Break-First to ensure 100% floor coverage.
+				if len(prep_first_staff) >= 2 and len(break_first_staff) == 0:
+					target_row = prep_first_staff[0]
+					print(f"LOGISTICS: Flipping Row {target_row} to [BREAK -> PREP] for coverage.")
+					
+					# Update Excel: Change Prep to Break
+					Create_Post(current_col + target_row, int(target_row), col_idx + 1, 'BREAK')
+					ws[current_col + target_row].fill = PatternFill(patternType='solid', fgColor=BREAK)
+					
+					# Update Excel: Change Break to Prep
+					Create_Post(next_col + target_row, int(target_row), col_idx + 2, 'PREP')
+					ws[next_col + target_row].fill = PatternFill(patternType='solid', fgColor=PREP)
+					
+					# Adjust our local tracking lists
+					break_first_staff.append(prep_first_staff.pop(0))
+
+				# 3. RE-ASSIGN PREP STAFF TO COVER CELEBRATE DUTIES
+				# (Since the Prep people are staying on B1, they will cover the Celebrate post)
+				for r_str in all_prep_rows:
+					# If they aren't on break, their duty is now 'CELEBRATE'
+					if ws[current_col + r_str].value == 'PREP':
+						ws[current_col + r_str].value = 'CELEB'
+					if ws[next_col + r_str].value == 'PREP':
+						ws[next_col + r_str].value = 'CELEB'
+
+				# 4. SACRIFICE THE ORIGINAL CELEBRATE PERSON
+				b1_celebrates = Locate('CELEBRATE')
+				if b1_celebrates:
+					for cel_cord in b1_celebrates:
+						cel_row = cel_cord[1:]
+						# Find the person who was ALREADY celebrate (not the ones we just re-labeled)
+						if cel_cord[0] == current_col and int(cel_row) < b1_end_row and cel_row not in all_prep_rows:
+							print(f"ACTION: Sacrificing original Celebrate at {cel_cord}. Moving to upstairs pool.")
+							
+							# Clean the cell for its new upstairs assignment
+							for mr in list(ws.merged_cells.ranges):
+								if cel_cord in mr: ws.unmerge_cells(str(mr))
+							
+							ws[cel_cord].value = None
+							ws[cel_cord].fill = PatternFill(fill_type=None)
+							
+							# Add body to upstairs pool
+							ROTATION_STARTERS.extend(Mix_Of_Both_B1_Tiers) #Important
+							ROTATION_STARTERS.append('CELEB') #Important
+							OB1_OB2_Floor_Rows.append(cel_cord)
+							OB1_OB2_Floor_Rows_Relief_List.append(cel_cord)
+							Celeb_B1_Cord = cel_cord #Important
+							# This var is important to be used later to let our code know not to delete CAB 2.
+							
+							# Logic balancing for floor split
+							if int(cel_row) < int(Locate('OB2')[0][1:]):
+								Floor_OB1.append(cel_cord)
+							else:
+								Floor_OB2.append(cel_cord)
+							
+							Shortage -= 1
+							break # One sacrifice per shortage unit
+				print ('')
+				print ('See if it worked.. Line 6735')
+				print ('After Adding B1 Cord: ', OB1_OB2_Floor_Rows)
+				print(f" Found {len(prep_first_staff)} Prep-First and {len(break_first_staff)} Break-First staffers.") #b1 preps is not accurately reading all the 30 min preps for the hour in the current letter column and for the column for the right.
+				print (Shortage)
+				Using_Celebrate_From_B1 += 1
+				wb.save(File_Name)
+				#sleep(10)
+
+			Celebs_Made = Locate('CELEB')
+            # Extract all column letters
+			cols = [''.join(filter(str.isalpha, c)) for c in Celebs_Made]
+
+            # If total length != unique count, at least 2 share a column letter
+			has_matching_column = len(cols) != len(set(cols))
+			if has_matching_column == True:
+				print ('Before: ', Celebs_Made)
+				print ('Inspect')
+				print("HIERARCHY 3: Column collision detected for CELEB posts. Rebalancing...")
+				
+				# Group coords by column letter to find exactly which ones are clashing
+				# Example: {'L': ['L30', 'L42'], 'M': ['M30']}
+				from collections import Counter
+				col_counts = Counter(cols)
+				
+				for cl_col, count in col_counts.items():
+					if count > 1:
+						# Find all coordinates in the clashing column
+						clashing_cords = [c for c in Celebs_Made if c.startswith(cl_col)]
+						
+						# We only need to fix one person to resolve the clash
+						cord_to_fix = clashing_cords[0] 
+						row_str = ''.join(filter(str.isdigit, cord_to_fix))
+						col_idx = ALPHABET.index(cl_col)
+						
+						# Determine the neighbor (Partner cell in the same hour block)
+						# Blocks are J/K, L/M, N/O. If index is odd (J, L, N), partner is to the right.
+						if col_idx % 2 == 1: 
+							neighbor_idx = col_idx + 1
+						else: # If index is even (K, M, O), partner is to the left
+							neighbor_idx = col_idx - 1
+							
+						neighbor_letter = ALPHABET[neighbor_idx]
+						neighbor_cord = neighbor_letter + row_str
+						
+						# Perform the swap only if the neighbor is a BREAK
+						if Temporary_Value(neighbor_cord, ws[neighbor_cord].value) == 'BREAK':
+							# 1. Move CELEB to the neighbor block
+							ws[neighbor_cord].value = 'CELEB'
+							ws[neighbor_cord].fill = PatternFill(patternType='solid', fgColor=B1)
+							
+							# 2. Move BREAK to the original block
+							ws[cord_to_fix].value = 'BREAK'
+							ws[cord_to_fix].fill = PatternFill(patternType='solid', fgColor=BREAK)
+							
+							print(f"REBALANCE SUCCESS: Swapped Row {row_str} from {cord_to_fix} to {neighbor_cord} to cover both half-hours.")
+							wb.save(File_Name)
+							
+						else:
+							print(f"REBALANCE WARNING: Row {row_str} neighbor {neighbor_cord} was not a BREAK. Could not swap.")
+				
+				# After fixing, refresh the list for the next check
+				Celebs_Made = Locate('CELEB')
+				#print ('After: ', Celebs_Made)
+			else:
+				print(f"NOTICE: Only {len(all_prep_rows)} Preps found. Hierarchy 3 requires 2. Skipping sacrifice.")
+				print("NOTICE: Not enough Preps on B1 to execute swap. Skipping Hierarchy 3.")
+				print ('See if it worked.. Line 6739')
+				#sleep(99999)
+
+				# 4. FINALIZATION: Assign FLOAT to protected leads and remove from pool
+
+				for lead_cord in Leads_To_Float:
+					col_idx = ALPHABET.index(lead_cord[0]) + 1
+					m_limit = 2 if lead_cord[0] == 'R' else 1
+					Cell_Range = lead_cord + ':' + ALPHABET[col_idx + m_limit - 1] + lead_cord[1:]
+					
+					Create_Post(Cell_Range, int(lead_cord[1:]), col_idx, EVERYTHING_ELSE[0])
+					ws[lead_cord].fill = PatternFill(patternType='solid', fgColor=FLOAT)
+					
+					# Remove from coordinate lists to prevent double-assignment
+					if lead_cord in OB1_OB2_Floor_Rows: OB1_OB2_Floor_Rows.remove(lead_cord)
+					if lead_cord in Floor_OB1: Floor_OB1.remove(lead_cord)
+					if lead_cord in Floor_OB2: Floor_OB2.remove(lead_cord)
+
+				# 5. ZERO-WASTE MATH: All remaining staff fill the split
+				Total_Spots = len(OB1_OB2_Floor_Rows)
+				OB1_Standard = Total_Spots // 2
+				OB2_Standard = Total_Spots - OB1_Standard
+
+				# Safety check for OB1 Floor minimum
+				if OB1_Standard < OB1_Min_Length and Total_Spots >= OB1_Min_Length:
+					OB1_Standard = OB1_Min_Length
+					OB2_Standard = Total_Spots - OB1_Standard
+
+				print(f"Final Count for Posts: OB1({OB1_Standard}) | OB2({OB2_Standard})")
+
+				
+
+
+				#sleep(99999)
+		
+				
 
 
 
@@ -6686,6 +7355,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 	
 
 	#Block of Code Below loops from OB1 - OB3 and finds all post cords that start the rotation for the next hour. Ex: 'BRIEF', 'TR2**' etc
+	wb.save(File_Name)
 	Start = int(Locate('OB1')[0][1:]) + 1 
 	End = int(Locate('OB3')[0][1:])
 	for i in range(Start, End):
@@ -6703,6 +7373,23 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			All_Cords_Upstairs.append(Letter_Left_To_1 + str(i))
 
 			#Add comments
+
+
+	# Force the sacrificed B1 row to be recognized as a rotation starter
+	if Using_Celebrate_From_B1 > 0:
+	    # Use the coordinate from the Celebrate person on B1
+		#b1_starter_cord = Letter_Left_To_1 + Celeb_B1_Cord[1:] 
+		#if b1_starter_cord not in Post_Pushing_Rotations_Cordinates:
+		#	Post_Pushing_Rotations_Cordinates.append(b1_starter_cord)
+
+		# We must add the CURRENT column coordinate to the scan list
+		current_b1_relief_cord = Letter_Currently + Celeb_B1_Cord[1:]
+		if current_b1_relief_cord not in OB1_OB2_Floor_Rows_Relief_List:
+			OB1_OB2_Floor_Rows_Relief_List.append(current_b1_relief_cord)
+
+
+
+
 
 
 	'''
@@ -6818,23 +7505,33 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 
 			'''
-			Adding these For Loops Below. Without them, the if Statement Below them pause the code because CAB Post haven't been properly removed from Temp Post list, 
-			and thats only because the code is re-rotating all post just to see if everyone has been relieved. If you comment them out and run, the code will pause
+			Adding these For Loops Below. Without them, the if Statement Below them pause the code because CAB Post haven't been properly removed from 
+			Temp Post list, 
+			and thats only because the code is re-rotating all post just to see if everyone has been relieved. If you comment them out and run, 
+			the code will pause
 			
 			Comment this Whole if Statement Out below, the one only with the for loops, if we ever make CAB Post for everyone, and not just Full Timers.
+
+			New: Important: Here we will add and z != Celeb_B1_Cord. Couldnt add that cause Celeb var isnt created unless we borrowed a cord from B1. 
+			Use the z less than OB1 Row num logic instead The error only happens cause the borrowed B1 Cord isnt in the OB1_OB2 List yet
 			'''
 			print ('')
 			if Restart_While_Loop != 0 and OB1_OB2_Floor_Rows[0][0] != 'F':
-				for z in Locate('CAB 1'):
-					if z[0][0] == OB1_OB2_Floor_Rows[0][0] and z not in OB1_OB2_Floor_Rows:
-						print ('CAB Post have been created already. Rotations just need to be re-done, and CAB Post need to be removed from the list.')
+				for z in Locate('CAB 1'): 
+					if z[0][0] == OB1_OB2_Floor_Rows[0][0] and z not in OB1_OB2_Floor_Rows and int(z[1:]) > int(Locate('OB1')[0][1:]):
+						print ('CAB 1 Post have been created already. Rotations just need to be re-done, and CAB Post need to be removed from the list.')
 						print (Both_Floor_Temporary_Post)
+						print (OB1_OB2_Floor_Rows)
+						print (z)
 						Both_Floor_Temporary_Post.remove('CAB 1')
 
+
 				for z in Locate('CAB 2**'):
-					if z[0][0] == OB1_OB2_Floor_Rows[0][0] and z not in OB1_OB2_Floor_Rows:
-						print ('CAB Post have been created already. Rotations just need to be re-done, and CAB Post need to be removed from the list.')
+					if z[0][0] == OB1_OB2_Floor_Rows[0][0] and z not in OB1_OB2_Floor_Rows and int(z[1:]) > int(Locate('OB1')[0][1:]):
+						print ('CAB 2 Post have been created already. Rotations just need to be re-done, and CAB Post need to be removed from the list.')
 						print (Both_Floor_Temporary_Post)
+						print (OB1_OB2_Floor_Rows)
+						print (z)
 						Both_Floor_Temporary_Post.remove('CAB 2**')
 
 
@@ -6846,10 +7543,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			# --- 1. ACCURATE RECOUNT & SEPARATION ---
 			current_col_letter = OB1_OB2_Floor_Rows[0][0]
 			start_row_upstairs = int(Locate('OB1')[0][1:]) + 1
-			end_row_upstairs = int(Locate('OB3')[0][1:])
+			end_row_upstairs = ws.max_row + 1
 
 			OB1_OB2_Floor_Rows = []        # Humans available for the general shuffle
 			Locked_Cab_Cords = []          # Humans currently locked into Elevator posts
+
+			if Using_Celebrate_From_B1 > 0:
+				OB1_OB2_Floor_Rows.append(Celeb_B1_Cord)
+				#Choosing not to forget to add that B1 Cord we borrowed due to short staff
 
 			for r in range(start_row_upstairs, end_row_upstairs):
 				coord = current_col_letter + str(r)
@@ -6862,6 +7563,10 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				# Category B: Available humans (Empty or previously failed attempts)
 				elif cell_val is None or cell_val in Overall_OB1_Post or cell_val in Overall_OB2_Post:
 					OB1_OB2_Floor_Rows.append(coord)
+
+			#breakerninefix
+			if OB1_OB2_Floor_Rows[0][0] == 'P':
+				OB1_OB2_Floor_Rows[:] = [item for item in OB1_OB2_Floor_Rows if item not in Upstairs_Breaker_Shifts_Cords]
 
 			# --- 2. SYNC THE JOB POOL WITH LOCKED HUMANS ---
 			# Remove jobs from the pool if a human is already "Locked" into that job on the sheet
@@ -6876,6 +7581,12 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				print(f"Staffing Deficit: {len(Both_Floor_Temporary_Post)} jobs vs {len(OB1_OB2_Floor_Rows)} humans.")
 				
 				while len(Both_Floor_Temporary_Post) > len(OB1_OB2_Floor_Rows):
+					print ('')
+					print ('Error Here: Line 7099')
+					print (Both_Floor_Temporary_Post)
+					print (len(Both_Floor_Temporary_Post))
+					print (OB1_OB2_Floor_Rows)
+					print (len(OB1_OB2_Floor_Rows))
 					removed = False
 					
 					# STEP A: Try to remove expendable Tier 2 posts first
@@ -6910,10 +7621,83 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 									Locked_Cab_Cords.remove(i)
 									print(f"CRITICAL SHORTAGE: Unmerged and sacrificed CAB 2** at {i}")
 							removed = True
+
+					# STEP C: Sacrifice Celebrate on B1 by swapping Prep/Break logic
+					if not removed:
+						current_col_letter = OB1_OB2_Floor_Rows[0][0]
+						b1_limit = int(Locate('OB1')[0][1:])
+						b1_preps = []
+
+						# 1. Find all PREP posts on B1 for this specific hour
+						all_preps = Locate('PREP')
+						if all_preps:
+							for p_cord in all_preps:
+								# Check if it matches current column and is on floor B1
+								if p_cord[0] == current_col_letter and int(p_cord[1:]) < b1_limit:
+									b1_preps.append(p_cord)
+
+						# 2. If we have 2 or more, we can afford to flip one and sacrifice Celebrate
+						random.shuffle(b1_preps)
+						if len(b1_preps) >= 2:
+							print(f"CONTINGENCY C: Found {len(b1_preps)} Preps on B1. Executing swap...")
+							
+							# Target the first Prep found to reverse their schedule
+							target_prep_cord = b1_preps[0]
+							row_num = int(target_prep_cord[1:])
+							col_idx = ALPHABET.index(current_col_letter)
+							
+							# Identify the neighbor cell (the second half of the hour)
+							neighbor_col = ALPHABET[col_idx + 1]
+							neighbor_cord = neighbor_col + str(row_num)
+
+							# REVERSE LOGIC: Instead of [Prep -> Break], make it [Break -> Prep]
+							# Handle Current Cell (Change Prep to Break)
+							Create_Post(target_prep_cord, row_num, col_idx + 1, 'BREAK')
+							ws[target_prep_cord].fill = PatternFill(patternType='solid', fgColor=BREAK)
+
+							# Handle Neighbor Cell (Change Break to Prep)
+							Create_Post(neighbor_cord, row_num, col_idx + 2, 'PREP')
+							ws[neighbor_cord].fill = PatternFill(patternType='solid', fgColor=PREP)
+							
+							# 3. SACRIFICE CELEBRATE
+							b1_celebrates = Locate('CELEBRATE')
+							if b1_celebrates:
+								for c_cord in b1_celebrates:
+									if c_cord[0] == current_col_letter and int(c_cord[1:]) < b1_limit:
+										print(f"CONTINGENCY C: Sacrificing Celebrate at {c_cord} for upstairs.")
+										
+										# Unmerge and clear the Celebrate cell
+										for merged_range in list(ws.merged_cells.ranges):
+											if c_cord in merged_range:
+												ws.unmerge_cells(str(merged_range))
+										
+										ws[c_cord].value = None
+										ws[c_cord].fill = PatternFill(fill_type=None, end_color='FFFFFF')
+										
+										# Add the Celebrate person to the upstairs pool
+										OB1_OB2_Floor_Rows.append(c_cord)
+										
+										# If reversing a reversed floor, ensure it's added to the right sub-list
+										if int(c_cord[1:]) < int(Locate('OB2')[0][1:]):
+											Floor_OB1.append(c_cord)
+										else:
+											Floor_OB2.append(c_cord)
+											
+										removed = True
+										print ('See if it works.. Error possibly here')
+										wb.save(File_Name)
+										#sleep(1401)
+										break # Only sacrifice one Celebrate per trigger
+						else:
+							print("CONTINGENCY C: Not enough Preps on B1 to execute Celebrate sacrifice. Line 7671")
+							wb.save(File_Name)
+							sleep(1401)
+
 						
 	
 
 				# Final count check for debugging
+				print ('')
 				print(f"Final Count Hour {current_col_letter}: Jobs ({len(Both_Floor_Temporary_Post)}) | Humans ({len(OB1_OB2_Floor_Rows)})")
 
 
@@ -6923,25 +7707,27 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				print (len(OB1_OB2_Floor_Rows))
 				print ('Updated Floor Rows: ', OB1_OB2_Floor_Rows)
 				print (len(OB1_OB2_Floor_Rows))
+				print ('Cabs We Made: ', Locate('CAB 1'))
+				print ('Cabs We Made: ', Locate('CAB 2**'))
+				print ('Locked Cab Cord: ', len(Locked_Cab_Cords))
 			elif len(Both_Floor_Temporary_Post) < len(OB1_OB2_Floor_Rows):
 				print ('OB1 n OB2 Temp Post: ', Both_Floor_Temporary_Post)
 				print (len(Both_Floor_Temporary_Post))
 				print ('OB1 n OB2 Coords: ', OB1_OB2_Floor_Rows)
 				print (len(OB1_OB2_Floor_Rows))
 				print ('Cabs We Made: ', Locate('CAB 1'))
-				print ('Cabs We Made: ', Locate('CAB 2'))
-				#Both_Floor_Temporary_Post.remove('CAB 2**')
-				#OB1_Tier_1.remove('CAB 2**')
+				print ('Cabs We Made: ', Locate('CAB 2**'))
+				print ('Locked Cab Cord: ', len(Locked_Cab_Cords))
 				wb.save(File_Name)
-				print ('Problem here 6903: May delete this, possibly solved issue.... not sure yet')
-				sleep(9999)
+				print ('Problem here 7427: May delete this, possibly solved issue.... not sure yet')
+				sleep(55555)
 			elif len(Both_Floor_Temporary_Post) == len(OB1_OB2_Floor_Rows):
 				pass
 
 			if len(Both_Floor_Temporary_Post) == 11: #Replace 11 with a var attached to ob1_ob2_floor_rows - 1
 				print('')
-				print ('problem here: 6918')
-				sleep(99999)
+				print ('problem here: 7440')
+				sleep(14011)
 
 
 				#The amount of post should always equal the amount of floor rows. in this example its 17 post and 16 rows.... delete one of the tier 2 post for ob1 if its multiple
@@ -6959,8 +7745,8 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				print (OB1_OB2_Floor_Rows)
 				print (Locked_Cab_Cords)
 				#OB1_OB2_Floor_Rows.extend(Locked_Cab_Cords)
-				wb.save(File_Name)
-				sleep(0)
+				#wb.save(File_Name)
+				
 
 
 
@@ -7039,59 +7825,50 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				#Basically if their isnt a Post on OB2 that starts the rotation, it will have OB1 Post Starters rotate to an OB2 Post.
 
 
+			
 
-			# --- CAB PRIORITY ASSIGNMENT (Pre-Loop) --- AI Assisted CAB / Full Timers only Code. 
-			#	Can comment this whole chunk of code out below if we make CAB Post for more than just Full Timers.
+			# --- CAB PRIORITY ASSIGNMENT (TRANSACTION-SAFE) --- AI Assisted Code
 			current_letter = OB1_OB2_Floor_Rows[0][0]
 			col_idx = column_index_from_string(current_letter)
 			
-			# 1. Purge exactly 2 CAB posts from the pool immediately
-			# This makes it impossible for regular staff to receive them in the loop below
-			cabs_to_hand_out = [p for p in Both_Floor_Temporary_Post if 'CAB' in p][:2]
-			Both_Floor_Temporary_Post = [p for p in Both_Floor_Temporary_Post if 'CAB' not in p]
+			# 1. Identify which CAB posts exist in the pool, but DON'T remove them yet
+			cabs_to_assign = [p for p in Both_Floor_Temporary_Post if 'CAB' in p]
 			
-			# 2. Build the priority pool (FTs first, then Leads)
+			# 2. Build priority pool (FTs first, then Leads)
 			ft_candidates = [current_letter + a[1:] for a in Full_Time_Closers_Row]
-			random.shuffle(ft_candidates)
-			
 			lead_backup = [current_letter + ld[1:] for ld in Leads_Upstairs]
-			random.shuffle(lead_backup)
-			
 			candidate_pool = ft_candidates + lead_backup
-			
-			# 3. Assignment Loop
-			for candidate_cord in candidate_pool:
-				if len(cabs_to_hand_out) == 0:
-					break 
+
+			for cab_job in cabs_to_assign:
+				assigned = False
+				for candidate_cord in candidate_pool:
+					# Check if this priority person is actually available this hour
+					if candidate_cord in OB1_OB2_Floor_Rows:
+						# Back-to-back check
+						has_recent_cab = False
+						if col_idx > 7: 
+							v1 = Temporary_Value(ws[candidate_cord].offset(column=-1).coordinate, ws[candidate_cord].offset(column=-1).value)
+							if v1 and 'CAB' in str(v1): has_recent_cab = True
+						
+						if not has_recent_cab or len(candidate_pool) <= 2:
+							# SUCCESS: Assign the post
+							m_limit = 2 if current_letter == 'R' else 1
+							target_range = candidate_cord + ':' + get_column_letter(col_idx + m_limit) + candidate_cord[1:]
+							
+							Create_Post(target_range, int(candidate_cord[1:]), col_idx, cab_job)
+							ws[candidate_cord].fill = PatternFill(patternType='solid', fgColor=OB2)
+							
+							# CRITICAL: Only remove from lists NOW that we have a match
+							if cab_job in Both_Floor_Temporary_Post:
+								Both_Floor_Temporary_Post.remove(cab_job)
+							OB1_OB2_Floor_Rows.remove(candidate_cord)
+							
+							assigned = True
+							print(f"CAB SUCCESS: {cab_job} assigned to {candidate_cord}.")
+							break # Move to next CAB job
 				
-				# Ensure they are actually on this floor this hour
-				if candidate_cord not in OB1_OB2_Floor_Rows:
-					continue
-
-				# Back-to-back prevention check
-				has_recent_cab = False
-				if col_idx > 7: 
-					val_1 = Temporary_Value(ws[candidate_cord].offset(column=-1).coordinate, ws[candidate_cord].offset(column=-1).value)
-					val_2 = Temporary_Value(ws[candidate_cord].offset(column=-2).coordinate, ws[candidate_cord].offset(column=-2).value)
-					
-					if (val_1 and 'CAB' in str(val_1)) or (val_2 and 'CAB' in str(val_2)):
-						has_recent_cab = True
-				
-				# If they are clear (or if we are desperate and FT/Leads are low, we force the assignment)
-				# To ensure the 2 CABs are ALWAYS filled, we only skip if there are other candidates left
-				if not has_recent_cab or len(candidate_pool) <= 2:
-					cab_job = cabs_to_hand_out.pop(0)
-					
-					# Determine merge
-					m_limit = 1
-					if current_letter == 'R': m_limit = 2
-					target_range = candidate_cord + ':' + get_column_letter(col_idx + m_limit) + candidate_cord[1:]
-					
-					Create_Post(target_range, int(candidate_cord[1:]), col_idx, cab_job)
-					ws[candidate_cord].fill = PatternFill(patternType='solid', fgColor=OB2)
-					
-					# Remove from coordination list so the regular loop ignores this row
-					OB1_OB2_Floor_Rows.remove(candidate_cord)
+				if not assigned:
+					print(f"CAB NOTICE: No priority staff available for {cab_job}. Leaving in pool for GSAs.")
 
 
 
@@ -7099,8 +7876,69 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 
 
-			#Creating the OB1 and OB2 post
+			#Creating the OB1 and OB2 post Below
+
+			'''
+			breakerninefix - Here we will make post for the last Breaker Post of the night. It will be all Tier 2 Post
+			 The specific if Statement below is only used to make the last post for the breaker shifts. Search all #breakerninefix hashtags in the code
+			#Delete them, and things will run smooth regardless. For some odd reason it messes up the rest of the cords getting post if i place this chunk
+			of code within the for loop that actually creates the OB1 and OB2 post. Chose to relocate it right above.
+			'''
+
+
+			if OB1_OB2_Floor_Rows[0][0] == 'P' and OB1_Hour_Post == 0:
+
+				Random_Tier_2_Post = ['PREP',]
+				Random_Tier_2_Post.extend(OB2_Tier_2)
+				#This will be a list of random Tier 2 Post to give
+
+				Scroll = 0
+				#Will dictate what post to give out for the last rotation using the Random Tier 2 List.
+
+				Random_Tier_2_Post[:] = [item for item in Random_Tier_2_Post if item not in Both_Floor_Temporary_Post]
+				random.shuffle(Random_Tier_2_Post)
+
+				print ('')
+				print (Random_Tier_2_Post)
+				print (Both_Floor_Temporary_Post)
+
+
+				for i in Upstairs_Breaker_Shifts_Cords:
+					Column_Number = ALPHABET.index(i[0]) + 1 #If this is 0 it re-makes the 1st Column, if its a value of 1 it redoes the 2nd Column
+					Cell = i #Not merging cells, so we dont relly need the cell var but we can keep it
+					Create_Post(Cell, int(i[1:]), Column_Number, Random_Tier_2_Post[Scroll])
+					OB1_Cell = PatternFill(patternType = 'solid', fgColor = OB1)
+					ws[i].fill = OB1_Cell
+					Scroll += 1
+
+
+				#Creating the Dark Boxes to End the Breaker Shifts for 9:30
+				for i in Upstairs_Breaker_Shifts_Cords:
+					#ws.merge_cells('D' + i[1:] + ':H' + i[1:]) #Merging all cells for breaker shifts until 6PM
+					Letter = 16             #Starts at the letter Q, which is where 9:30PM starts
+					ws[ALPHABET[Letter] + i[1:]].fill = Dark
+					ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+					Letter += 1
+
+				wb.save(File_Name)
+				print (OB1_Hour_Post)
+				print ('Check here')
+				#sleep(9999)
+
+
+
+			# For loop below is the Main Area that creates the OB1 and OB2 Floor Post.
 			for i in OB1_OB2_Floor_Rows:
+				
+
+		
+				
+
+
+
+
+
+
 
 				if Both_Floor_Temporary_Post[Post_Tier] in Overall_OB1_Post and OB1_Hour_Post <= 1: #i in Floor_OB1
 
@@ -7139,16 +7977,8 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					#print (Both_Floor_Temporary_Post[Post_Tier])
 					#print ('___________________________________________________________________________________')
 					Post_Tier += 1
-					#wb.save(File_Name) #Slight ERROR HERE, IN THIS CHUNK
+					#wb.save(File_Name)
 
-					'''
-					if Post_Tier == 8 and i[0] == 'J': #Can delete this chunk of code later if needed
-						print (len(Both_Floor_Temporary_Post))
-						print (len(OB1_OB2_Floor_Rows))
-						print (OB1_OB2_Floor_Rows)
-						print ('Need to see the errors at Line 6372')
-						sleep(9999)
-					'''
 
 				#Adding the != R so the if Statement below this that == R can create OB2 Post that Extend for 3 Columns.
 				elif OB1_OB2_Floor_Rows[0][0] != 'R' and Both_Floor_Temporary_Post[Post_Tier] in Overall_OB2_Post and OB1_Hour_Post == 0: #i in Floor_OB2  |  #This only needs to Create Post 1 time, to ensure that, OB1_Hour_Post has to be 0
@@ -7180,22 +8010,24 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					Post_Tier += 1
 					#wb.save(File_Name)
 
-			#if OB1_OB2_Floor_Rows[0][0] == 'H':
-			#	print ('')
-			#	print ('OB1 n OB2 Temp Post: ', Both_Floor_Temporary_Post)
-			#	print ('Sleeping........ Line 6711')
-			#	wb.save(File_Name)
-			#	sleep(99999)
-				#Delete this later
+
+			
+			Upstairs_Post = []
+			Upstairs_Post.extend(OB1_Tier_1  + OB2_Tier_1)
+			if Locate('CELEB') != None: #You can also use Previous_Post_Rotations_Values created below this code, as an indicator.
+				for i in Upstairs_Post:
+					for a in Locate(i):
+						if int(a[1:]) < int(Locate('OB1')[0][1:]):
+							print (a)
+							OB1_OB2_Floor_Rows_Relief_List.append(OB1_OB2_Floor_Rows_Relief_List[0][0] + a[1:])
+				OB1_OB2_Floor_Rows_Relief_List = list(dict.fromkeys(OB1_OB2_Floor_Rows_Relief_List))
+				#Removing Duplicates
 
 
+			#Important Code Above: When you find the time, revise this for loop to only activate if we ever borrow from B1. This adds any B1 Cords we may have borrowed
+			# To the relief list. Very important code.
 
-
-
-			#print (Both_Floor_Temporary_Post)
-			#print (len(Both_Floor_Temporary_Post))
-			#print ('Check File')
-			#sleep(99999) - Delete this chunk
+			
 
 			
 			''' #Moving this Code Before the OB1_OB2 Post Creation Post - Delete this big chunk of code later if you need too.
@@ -7596,12 +8428,48 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 							print ('Inner List #: ', Relieved_Post_Inner_List_Var)
 							print ('Both Floor List: ', OB1_OB2_Floor_Rows_Relief_List) #Still have to fix this so it adds every cord from ob1 to ob3.... hasnt been fixed
 							print ('Showing Current List Progress: ', Relieved_Post)
+							print ('Did we borrow from B1: ', Using_Celebrate_From_B1)
+							print ('ROTATION Starters: ', ROTATION_STARTERS)
+							print ()
 							print ('------')
 							print ('')
-							
+
+							#May need to add this concept to my B1 Rotation Post Check and Balance
+							# Determine which physical row we are following
+							if len(Relieved_Post[Relieved_Post_Inner_List_Var]) == 0:
+								target_row = Post_Starter[1:] # Start with the row of the starter
+							elif len(Relieved_Post[Relieved_Post_Inner_List_Var]) >= 2:
+								cell_Letter = ws[Relieved_Cords[0]].offset(row=0, column=-1).coordinate
+								cell_Letter = cell_Letter[0]
+
+								cell2_Letter = Relieved_Cords[0][0]
+ 
+
+
+						        # Follow the row of the last coordinate we physically relieved
+								for a in Locate(Relieved_Post[Relieved_Post_Inner_List_Var][-1]):
+									if Temporary_Value(a, ws[a].value) == Temporary_Value(cell_Letter + a[1:], ws[cell_Letter + a[1:]].value):
+										target_row = a[1:]
+
+
+								#target_row = Relieved_Cords[-1][1:]
+								print ('Current List: ', Relieved_Post[Relieved_Post_Inner_List_Var])
+								print ('Relieved Cords: ', Relieved_Cords)
+								print (cell_Letter, cell2_Letter)
+								
 							
 
-							for Floor_Cords in OB1_OB2_Floor_Rows_Relief_List: #New List will go here
+							
+							
+							for Floor_Cords in OB1_OB2_Floor_Rows_Relief_List: 
+
+								# RECRUITMENT FILTER: Ignore every row except the one we are following
+								#May need to add this concept to my B1 Rotation Post Check and Balance
+								if Floor_Cords[1:] != target_row:
+									continue
+
+								
+
 								cell2 = Temporary_Value(Floor_Cords, ws[Floor_Cords].value)                 	#ws[Floor_Cords].value | Will be the value of the Floor's Cord List Cells which is the most recent list in the excel and also printed out in the terminal when its ran
 								cell = Temporary_Value(Letter_Next_To_1 + Floor_Cords[1:], ws[Letter_Next_To_1 + Floor_Cords[1:]].value) #ws[Letter_Next_To_1 + Floor_Cords[1:]].value | Will be the value of the 2nd cell directly to the left of the most filled in Column
 
@@ -7612,8 +8480,9 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 
 									
-								print (Letter_Next_To_1 + Floor_Cords[1:])
-								print (Post_Starter)
+								print ('Cell: ', Letter_Next_To_1 + Floor_Cords[1:])
+								print ('Cell 2: ', Floor_Cords)
+								print ('Post Starter: ', Post_Starter)
 								print ('Inner Var Value: ', Relieved_Post_Inner_List_Var)
 								print ('Relieved Post List: ', Relieved_Post)
 								#Minor error here.... Inner Var happens to be a higher value than it should be... in return starts the list with the last inner list
@@ -7647,30 +8516,36 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 									
 									#-b1relief
-									if '*' in Post_Starter_Value or Post_Starter_Value in EVERYTHING_ELSE or Post_Starter_Value in FREIGHT or Post_Starter_Value in Mix_Of_Both_B1_Tiers: 
+									if '*' in Post_Starter_Value or Post_Starter_Value in EVERYTHING_ELSE or Post_Starter_Value in FREIGHT or Post_Starter_Value in Mix_Of_Both_B1_Tiers or Post_Starter_Value in ROTATION_STARTERS: 
 										print ('Currently Relieved: ', Relieved_Post[Relieved_Post_Inner_List_Var])
 										
 
-										Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
+										Has_Post_Been_Relieved = any((Letter_Left_To_1 + Floor_Cords[1:]) in sublist for sublist in Relieved_Cords) 
 										#Will be used to check inside of all the list inside Relieved Post list of list and see if that post is already accounted for
 
 										#Was Here Last!!!!!!!!!!!!!11 - Delete Later
-										cell2 = Temporary_Value(Floor_Cords, cell2)
+										cell2 = Temporary_Value(Floor_Cords, ws[Floor_Cords].value)
 										cell = Temporary_Value(Letter_Next_To_1 + Floor_Cords[1:], cell)
 
+										cell2_cord = Floor_Cords
+										cell_cord = Letter_Next_To_1 + Floor_Cords[1:]
+
 										print (cell + ' Relieved Status: ', Has_Post_Been_Relieved)
+
+
 										
 
 										
 
 										#This if statement is always for the Post Starter cell and also the post that come after that may not start the rotation, ut will keep it going. Thats why the or statement is for if the list has a higher value than 1
-										if cell in ROTATION_STARTERS or len(Relieved_Post[Relieved_Post_Inner_List_Var]) >= 1 or cell == EVERYTHING_ELSE[1]:
+										if cell in ROTATION_STARTERS or len(Relieved_Post[Relieved_Post_Inner_List_Var]) >= 1 or cell == EVERYTHING_ELSE[1] or cell in Mix_Of_Both_B1_Tiers:
 											print ('Made it Here....')
 											if '*' in cell and cell not in Relieved_Post[Relieved_Post_Inner_List_Var] and cell2 not in ROTATION_STARTERS and len(Relieved_Post[Relieved_Post_Inner_List_Var]) == 0 or cell in ROTATION_STARTERS and cell not in Relieved_Post[Relieved_Post_Inner_List_Var] and cell2 not in ROTATION_STARTERS and len(Relieved_Post[Relieved_Post_Inner_List_Var]) == 0:
 												Relieved_Post[Relieved_Post_Inner_List_Var].append(cell) #Relieved_Post_Inner_List_Var - Determines what list we are using first inside of Relieved_Post; Starting with 0
 												Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
 												Relieved_Cords.append(Floor_Cords)
-												print ('if statement 1')
+												print ('if statement 1-')
+									
 
 												if cell2 in ROTATION_STARTERS or '*' in cell2 and len(Relieved_Post[Relieved_Post_Inner_List_Var]) > 0:
 													Relieved_Post_Inner_List_Var += 1
@@ -7680,11 +8555,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 											elif cell in ROTATION_STARTERS and cell2 in ROTATION_STARTERS and len(Relieved_Post[Relieved_Post_Inner_List_Var]) < 1  :
 												sleep(0)
-												print ('if statement 2')
+												print ('if statement 2+')
 												if cell in EVERYTHING_ELSE and cell2 in ROTATION_STARTERS or cell in EVERYTHING_ELSE and cell2 in FREIGHT:
 													Relieved_Post[Relieved_Post_Inner_List_Var].append(cell)
 													Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
 													Relieved_Cords.append(Floor_Cords)
+													print ('Current Relieved Cords: ',Relieved_Cords)
+													print (f'Cell 1: {cell} and Cell 2: {cell2}')
+													#An Error is Here - 7/26/26 Relieving the wrong cords. Now fixed 7/28. Delete when you come across this again
 
 													# FIX: Print BEFORE incrementing
 													print(f"Chain {Relieved_Post_Inner_List_Var} complete: {Relieved_Post[Relieved_Post_Inner_List_Var]}")
@@ -7694,11 +8572,10 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 														Relieved_Post_Inner_List_Var += 1
 														Rotation_Complete += 1
 
-													# Old Code Below - Delete Later
-													#Relieved_Post_Inner_List_Var += 1
-													#Rotation_Complete += 1
+													
 													print ('if statement 2A..... This ROTATION is Ending EARLY')
 													break # Exit Floor_Cords loop
+
 
 												elif cell in EVERYTHING_ELSE: #If its a full BREAK.... kinda thinking this code is useless too because of the at risk if statement
 													Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
@@ -7756,8 +8633,6 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 													break # Exit Floor_Cords loop
 												elif cell in Relieved_Post[Relieved_Post_Inner_List_Var] and '*' in cell2 and len(Relieved_Post[Relieved_Post_Inner_List_Var]) > 1:
 													Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
-													#OB1_OB2_Floor_Rows_Relief_List.remove(Floor_Cords)
-													#print ('Cords Removed: ', Floor_Cords)
 													Relieved_Cords.append(Floor_Cords)
 													print ('Ending this Rotation--')
 
@@ -7768,25 +8643,23 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 														break
 													else:
 													    # Optional: print for debugging so you see it failing
-													    print(f"Index tried to move from {Relieved_Post_Inner_List_Var}, but list was empty. Staying at {Relieved_Post_Inner_List_Var}.")
+														print(f"Index tried to move from {Relieved_Post_Inner_List_Var}, but list was empty. Staying at {Relieved_Post_Inner_List_Var}.")
+														
 													
 
-													#Relieved_Post_Inner_List_Var += 1
-													#Rotation_Complete += 1
-													#Old Code: Delete Later
-													#xy10
+													
 												elif cell in Relieved_Post[Relieved_Post_Inner_List_Var] and cell2 not in Relieved_Post[Relieved_Post_Inner_List_Var] and len(Relieved_Post[Relieved_Post_Inner_List_Var]) > 1:
 													print (cell + 'Is Relieving ' + cell2)
 													Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
 													Relieved_Cords.append(Floor_Cords)
-													print ('if statement 4')
-													#OB1_OB2_Floor_Rows_Relief_List.remove(Floor_Cords)
-													#print ('Cords Removed: ', Floor_Cords)
+													print ('if statement 4-')
+						
 											elif cell not in ROTATION_STARTERS and cell == Relieved_Post[Relieved_Post_Inner_List_Var][-1]:
 												Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
 												Relieved_Cords.append(Floor_Cords)
-												print (cell + 'Is Relieving ' + cell2)
-												print ('if statement 5')
+												print ('Current Relieved Cords: ',Relieved_Cords)
+												print (f'Cell 1: {cell} and Cell 2: {cell2}')
+												print ('if statement 5-')
 
 												if cell2 in ROTATION_STARTERS or '*' in cell2:
 													# AI Assisted Solution: Only move to the next rotation line if we actually successfully relieved someone
@@ -7802,13 +8675,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 													#Rotation_Complete += 1
 													print ('Ending this rotation')
 													break
+
 											elif cell == EVERYTHING_ELSE[1] and len(Relieved_Post[Relieved_Post_Inner_List_Var]) == 0: 
 											#This will be used for BREAKER SHIFTS after their BRIEFING
 
 												Relieved_Post[Relieved_Post_Inner_List_Var].append(cell2)
 												Relieved_Cords.append(Floor_Cords)
 												print (cell + 'Is Relieving ' + cell2)
-												print ('if statement 6')
+												print ('if statement 6-')
 
 												if cell2 in ROTATION_STARTERS or '*' in cell2:
 
@@ -7892,22 +8766,10 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 								Unrelieved_Post = list(set(OB1_OB2_Tier_1_List) - set(Collapsed_List_Of_Relieved_Post))
 								print ('Tier 1 Post Hasnt Been Relieved: ', Unrelieved_Post)
-								wb.save(File_Name)
+								#wb.save(File_Name)
 								
 								#This is a list that will print every important Tier 1 Post that hasnt been relieved
 
-								#if OB1_OB2_Floor_Rows_Relief_List[0][0] == 'L':
-								#	print ('')
-								#	print ('Relief List: ', OB1_OB2_Floor_Rows_Relief_List)
-								#	print ('')
-								#	print ('Cords to Add Post To: ', OB1_OB2_Floor_Rows)
-								#	print (len(OB1_OB2_Floor_Rows))
-								#	print ('')
-								#	print ('List of Post: ', Both_Floor_Temporary_Post)
-								#	print (len(Both_Floor_Temporary_Post))
-								#	print ('READ ME: Dont forget we are forcing the freight solution just to find the bug. Unforce it once fixed')
-									#sleep(7)
-									#-b1relief
 
 
 								if len(Unrelieved_Post) == 0:
@@ -8084,10 +8946,8 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 						if int(a[1:]) < OB1_Row and a[0] == Floor_OB1_P2[0][0] and a not in Floor_OB1_P2: # OB1_PT2_Floor_Rows_Relief_List[0][0]:
 							OB1_PT2_Floor_Rows_Relief_List.append(a)
 							Floor_OB1_P2.append(a)
-							print ('Added: ', a)
-							print ('Testing New Code... Sleeping-. When done don forget to delete all the print codes and tie this into an if statement based on OB1_OB2_Floor_Rows_Relief_List.append(B1_Post_To_Borrow[0]) ')
 							break
-							sleep(0)
+							
 
 				if len(Post_Pushing_Rotations_Cordinates_2) == 0:
 					for a in Floor_OB1:
@@ -8116,8 +8976,8 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 						left_index = column_index - 1
 						left_letter = get_column_letter(left_index)
 
-						Newly_Added_B1_Cord = OB1_PT2_Floor_Rows_Relief_List[0][0] + B1_Post_To_Borrow[0][1:]
-						Newly_Added_B1_Cord_Updated = left_letter + B1_Post_To_Borrow[0][1:]
+						Newly_Added_B1_Cord = OB1_PT2_Floor_Rows_Relief_List[0][0] + Celeb_B1_Cord[0][1:]
+						Newly_Added_B1_Cord_Updated = left_letter + Celeb_B1_Cord[0][1:]
 						OB1_PT2_Floor_Rows_Relief_List.append(Newly_Added_B1_Cord)
 						if Temporary_Value(Newly_Added_B1_Cord_Updated, ws[Newly_Added_B1_Cord_Updated].value) in ROTATION_STARTERS:
 							Post_Pushing_Rotations_Cordinates_2.append(Newly_Added_B1_Cord_Updated)
@@ -8156,8 +9016,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					
 					#-b1relief
 					if EVERYTHING_ELSE[1] == Temporary_Value(Post_Starter, ws[Post_Starter].value) or '**' in Temporary_Value(Post_Starter, ws[Post_Starter].value) or Temporary_Value(Post_Starter, ws[Post_Starter].value) in ROTATION_STARTERS:
-
+						#wb.save(File_Name)
 						Rotation_Complete = 0 #Var used to help end the while Loop below. It'll become 1 at the end of every complete rotation
+
+						if Using_Celebrate_From_B1 > 0:
+							for i in Floor_OB1_P2:
+								if i not in OB1_PT2_Floor_Rows_Relief_List:
+									OB1_PT2_Floor_Rows_Relief_List.append(i)
+									#This code is literally to use the B1 Code, and to still check and see if we need to relieve someone down there. For some reason that B1 Code is being left out.
 
 						while Rotation_Complete == 0: #Should be connected to the amount of post rotation starters there are in this hour rotation
 							print ('Starting With: ', ws[Post_Starter].value)
@@ -8229,7 +9095,10 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 										    print ('Currently Relieved: [No active posts / Empty]')
 										
 
-										Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
+										#Has_Post_Been_Relieved = any(cell in sublist for sublist in Relieved_Post) 
+										# Check if the physical source cell was already relieved
+										source_coordinate = Letter_Left_To + Floor_Cords[1:]
+										Has_Post_Been_Relieved = source_coordinate in Relieved_Cords
 										#Will be used to check inside of all the list inside Relieved Post list of list and see if that post is already accounted for
 
 										#Was Here Last!!!!!!!!!!!!!11 - Delete Later
@@ -8488,34 +9357,33 @@ print ('')
 
 #Counting Empty Cells from OB1 - OB2
 OB1_OB2_Floor_Rows = []
-FloorCellCount('F', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('F', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 
 #Counting Empty Cells from OB1 - OB2
 OB1_OB2_Floor_Rows = []
-FloorCellCount('H', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('H', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 #If ever an Issue, comment this block out and uncomment 4352 - 4355
 print ('Column H is Done')
 #sleep(99999)
 
 OB1_OB2_Floor_Rows = []
-FloorCellCount('J', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('J', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 print ('Column J is Done')
 print ('break this down column by column and see why its choosing to grab b1 post and also dumplicate aff3 post')
-#sleep(99999)
 
 
 
 OB1_OB2_Floor_Rows = []
-FloorCellCount('L', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('L', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 print ('Column L is Done')
 
 
 OB1_OB2_Floor_Rows = []
-FloorCellCount('N', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('N', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 print ('Column N is Done')
 
@@ -8523,25 +9391,16 @@ print ('Column N is Done')
 
 
 OB1_OB2_Floor_Rows = []
-FloorCellCount('P', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('P', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 print ('Column P is Done')
 
 
 OB1_OB2_Floor_Rows = []
-FloorCellCount('R', OB1_OB2_Floor_Rows, 'OB3', int(Locate('OB1')[0][1:]))
+FloorCellCount('R', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 print ('Column R is Done')
-sleep(99999)
-
-
-
-
-print ('')
-print ('Will Create a OB1 and OB2 Function')
-#sleep(9999)
-
-
+wb.save(File_Name)
 
 
 
@@ -8554,11 +9413,9 @@ for row in ws.iter_rows():
         if cell.value == EVERYTHING_ELSE[0]:
         	FLOAT_CELL = PatternFill(patternType = 'solid', fgColor = FLOAT)
         	cell.fill = FLOAT_CELL
-        	wb.save(File_Name)
         elif cell.value in OB1_Tier_1 or cell.value in OB1_Tier_2:
         	OB1_Cell = PatternFill(patternType = 'solid', fgColor = OB1)
         	cell.fill = OB1_Cell
-        	wb.save(File_Name)
 
 
 
@@ -8599,57 +9456,9 @@ for i in Leads_Upstairs:
 
 
 print ('Done Before Merge')
-#sleep(99999)
+sleep(99999)
 
 
-#---Mega Cell Merge---
-#Code Below Will be Merging All Cells next to Each Other that are the exact Same..
-
-# Row number to check (adjust according to your needs)
-row_num = 1  # Example: checking the first row
-
-# Get all merged cell ranges in the worksheet
-merged_ranges = ws.merged_cells.ranges
-
-def get_merged_cell_value(ws, cell):
-    """Helper function to get the value of a merged cell if applicable."""
-    for merged_range in merged_ranges:
-        if cell.coordinate in merged_range:
-            top_left_cell = ws.cell(merged_range.min_row, merged_range.min_col)
-            return top_left_cell.value
-    return cell.value
-
-for row_num in range(1, 41):
-	start_col = None  # Track the start of a group of same-text cells
-	previous_value = None  # To store the value of the previous cell
-
-	# Iterate through each cell in the specified row
-	for cell in ws[row_num]:
-	    current_value = get_merged_cell_value(ws, cell)
-	    
-	    # If the current cell value matches the previous one, continue the merge
-	    if current_value == previous_value:
-	        if start_col is None:
-	            start_col = cell.column - 1  # Start merging from the previous column
-	    else:
-	        # If the value changes, merge the previous group (if any)
-	        if start_col is not None:
-	            ws.merge_cells(start_row=row_num, start_column=start_col, end_row=row_num, end_column=cell.column - 1)
-	            start_col = None  # Reset for the next group
-	            wb.save(File_Name)
-	    
-	    # Update the previous value to the current one
-	    previous_value = current_value
-
-	# Handle any final merge group at the end of the row
-	if start_col is not None:
-	    ws.merge_cells(start_row=row_num, start_column=start_col, end_row=row_num, end_column=cell.column)
-	    wb.save(File_Name)
-
-
-
-# Save the changes to the workbook
-wb.save(File_Name)
 
 
 #Fixing the 3 Cell - Merge of the Floor Names B1, OB1 etc
@@ -8661,7 +9470,6 @@ for i in range(Start, End):
 		Cell = 'A' + str(i) + ':C' + str(i)
 		index = ALPHABET.index('A') + 2
 		Create_Post(Cell, int(i), 1, ws['A' + str(i)].value)
-		wb.save(File_Name)
 
 
 
@@ -8683,6 +9491,8 @@ for a in Full_Time_Closers_Row:
 		ws['E' + a[1:]].value = Full_Timers_4PM_Post_Upstairs[num2]
 		ws['E' + a[1:]].border = border
 		ws['E' + a[1:]].alignment = Center_Text
+		# Save the changes to the workbook
+		wb.save(File_Name)
 
 		#if Full_Timers_4PM_Post_Upstairs[num2] in Overall_OB2_Post:
 		#	ws['E' + a[1:]].fill = OB2_Cell
@@ -8692,7 +9502,7 @@ for a in Full_Time_Closers_Row:
 
 
 		num2 = num2 + 1
-	wb.save(File_Name)
+
 
 
 
@@ -8710,7 +9520,7 @@ for i in range(Start, End):
 		ws['D' + str(i)].fill = Brief
 		ws['D' + str(i)].border = border
 		ws['D' + str(i)].alignment = Center_Text
-		wb.save(File_Name)
+		
 		
 
 		
@@ -8740,6 +9550,11 @@ for row in ws.iter_rows():
         elif cell.value in Overall_OB2_Post:
         	OB2_Cell = PatternFill(patternType = 'solid', fgColor = OB2)
         	cell.fill = OB2_Cell
+
+
+#---Mega Cell Merge---
+#Fix Later: Code Below Will be Merging All Cells next to Each Other that are the exact Same..
+
 
 
 
