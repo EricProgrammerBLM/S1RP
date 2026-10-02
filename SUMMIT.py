@@ -137,6 +137,10 @@ CLEAR_COLOR = 'E3CDF7'
 #Cell Styles
 Center_Text = Alignment(horizontal= 'center', vertical='center')
 
+#This code below will detemine if its a Morning Rotation / AM = 0 being made or Nighttime rotation / PM = 1
+TypeOfRotation = 1
+
+
 
 
 
@@ -185,7 +189,7 @@ FLOAT_LIST = ['FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FLOAT', 'FL
 EVERYTHING_ELSE = ['FLOAT', 'BRIEF', 'CKLST', 'BREAK']
 
 WORK_TIMES = ['4:00pm-12:00am', '4:00pm-11:00pm', '6pm-10:30pm', 'LEAD', '3:30pm-12:00pm'] #This will get fixed last....
-ROTATION_STARTERS = ['SHOE PREP**', 'LAUNCH**', 'SHOES 2**', 'PREP', 'ESC**', 'TR1**', 'S ELE**', 'TR2**', 'TR3**','TR4**', 'TR5**','AFF 3**', 'LEVITATION**', 'UNITY 2**', 'BREAK', 'BRIEF', EVERYTHING_ELSE[0], 'FREIGHT PULLER', 'FREIGHT RIDER', 'FREIGHT RIDER', 'FREIGHT COUNTER', 'OB2 SERVICE**', 'EXIT LINE 2**', 'SKIP', 'RISE LINE 2**', 'HELLO 3**', 'SHOES 2**', 'SHOE PREP**', 'FACESCAN**', 'B1 BOH FREIGHT', 'HELLO 2**', 'TURNSTILE 2**', 'RADIO', 'CAB 2**']
+ROTATION_STARTERS = ['SHOE PREP**', 'LAUNCH**', 'SHOES 2**', 'PREP', 'ESC**', 'TR1**', 'S ELE**', 'TR2**', 'TR3**','TR4**', 'TR5**','AFF 3**', 'LEVITATION**', 'UNITY 2**', 'BREAK', 'BRIEF', EVERYTHING_ELSE[0], 'FREIGHT PULLER', 'FREIGHT RIDER', 'FREIGHT RIDER', 'FREIGHT COUNTER', 'OB2 SERVICE**', 'EXIT LINE 2**', 'SKIP', 'RISE LINE 2**', 'HELLO 3**', 'SHOES 2**', 'SHOE PREP**', 'FACESCAN**', 'B1 BOH FREIGHT', 'HELLO 2**', 'TURNSTILE 2**', 'RADIO', 'CAB 2**', 'CLEAR']
 #POTENTIAL ERROR READ: B1 FREIGHT CAN NOT BE ADDED TO THIS YET....... Leads to an ERROR on B1's Rotation relief Function for some reason... not SURE WHY. Add it when we re-do B1
 
 RANDOMNESS = [1, 0, 0] #This list will literally be used just to add randomness to certain post being picked out
@@ -261,11 +265,11 @@ while Time_Periods[0] != 0 and Time_Periods[4] != 5: #Possibly turn this into a 
 
 # Full Timers; FULL TIMERS; SHIFTS; ADP - All searchable hash tags to help find this later
 Full_Time_Closers = 9 #3
-Closers = 10 #Was 14 Before        
+Closers = 12 #Was 14 Before        
 Closers = Closers + Full_Time_Closers
-Closers_Untill_11 = 12 #6
+Closers_Untill_11 = 10 #6
 #The Amount of people coming in with Regular Closing/Opening Shifts
-Leads = 4 #4              #Any Leads more than 7 is an error; 8 or more is an error
+Leads = 5 #4              #Any Leads more than 7 is an error; 8 or more is an error
 Leads_2 = Leads        #Will be needed later on
 #Lead shifts. Almost no different than Regular shifts except slightly different post (Floating, Radio, CHECKLIST etc)
 Breakers = 8 #8,anything over 9 is a bug  
@@ -892,23 +896,6 @@ for i in range(len(Shift_Rows)):
 
 
 #This function will be used to recount every shift lift, to recreate accuracy inside all shift list
-'''
-Old Code, can Delete later if it works
-
-def Recount(the_shift_list, char_to_look_for):
-	start_row = 5
-	end_row = 50
-	column_letter = 'B'  # Replace 'A' with the desired column letter
-	for row_number in range(start_row, end_row + 1):
-		cell_value = ws[column_letter + str(row_number)].value
-		
-		# Check if the cell value contains the target character '12' Which represents regular closing shifts
-		if cell_value and char_to_look_for in cell_value:
-			# If yes, add the cell coordinates to the list
-			the_shift_list.append((column_letter + str(row_number)))
-
-	return (the_shift_list)
-'''
 
 
 def Recount(the_shift_list, char_to_look_for):
@@ -1005,43 +992,73 @@ if len(Create_Balance) - Total > 0:
 
 #Adding in the Black Boxes for Breaker Shifts and Briefing Column/ Also Black Boxes for 4-11
 for i in Breaker_Rows:
-	#ws.merge_cells('D' + i[1:] + ':H' + i[1:]) #Merging all cells for breaker shifts until 6PM
-	Letter = 3             #Starts at the letter D, which is where 11PM starts
-	for color in range(5): #Instead of merging the cells we just painted them all black to help make things easier as we move forward
-		ws[ALPHABET[Letter] + i[1:]].fill = Dark
-		ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
-		Letter += 1
-	wb.save(File_Name)
+	if TypeOfRotation == 0: # AM Rotation
+		# Morning equivalent: 10:30am-2:30pm (was 6pm-10:30pm)
+		Letter = 3   # D -> 7:00AM
+		for color in range(7):   # D,E,F,G,H,I,J -> 7:00AM-10:00AM
+			ws[ALPHABET[Letter] + i[1:]].fill = Dark
+			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+			Letter += 1
+		wb.save(File_Name)
 
-	#Writing Briefing in the code below for the Column I which is the start of breaker shifts
-	ws['I' + i[1:]].value = EVERYTHING_ELSE[1] #Adding 'BRIEF' on the start of briefing shifts
-	ws['I' + i[1:]].fill = Brief
-	ws['I' + i[1:]].border = border
-	ws['I' + i[1:]].alignment = Center_Text
+		ws['K' + i[1:]].value = EVERYTHING_ELSE[1]   # BRIEF at 10:30AM, work starts 11:00AM (L)
+		ws['K' + i[1:]].fill = Brief
+		ws['K' + i[1:]].border = border
+		ws['K' + i[1:]].alignment = Center_Text
 
-	#Coloring the end of the shift black below
-	#ws.merge_cells('R' + i[1:] + ':V' + i[1:])
-	Letter = 17            #Starts at the letter R, which is where 10:30PM starts
-	for color in range(5): #Instead of merging the cells we just painted them all black to help make things easier as we move forward
-		ws[ALPHABET[Letter] + i[1:]].fill = Dark
-		ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
-		Letter += 1
-	wb.save(File_Name)
+		Letter = 18   # S -> 2:30PM
+		for color in range(4):   # S,T,U,V -> 2:30PM-4:00PM
+			ws[ALPHABET[Letter] + i[1:]].fill = Dark
+			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+			Letter += 1
+		wb.save(File_Name)
+
+	elif TypeOfRotation == 1: # PM Rotation
+		#ws.merge_cells('D' + i[1:] + ':H' + i[1:]) #Merging all cells for breaker shifts until 6PM
+		Letter = 3             #Starts at the letter D, which is where 11PM starts
+		for color in range(5): #Instead of merging the cells we just painted them all black to help make things easier as we move forward
+			ws[ALPHABET[Letter] + i[1:]].fill = Dark
+			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+			Letter += 1
+		wb.save(File_Name)
+
+		#Writing Briefing in the code below for the Column I which is the start of breaker shifts
+		ws['I' + i[1:]].value = EVERYTHING_ELSE[1] #Adding 'BRIEF' on the start of briefing shifts
+		ws['I' + i[1:]].fill = Brief
+		ws['I' + i[1:]].border = border
+		ws['I' + i[1:]].alignment = Center_Text
+
+		#Coloring the end of the shift black below
+		#ws.merge_cells('R' + i[1:] + ':V' + i[1:])
+		Letter = 17            #Starts at the letter R, which is where 10:30PM starts
+		for color in range(5): #Instead of merging the cells we just painted them all black to help make things easier as we move forward
+			ws[ALPHABET[Letter] + i[1:]].fill = Dark
+			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+			Letter += 1
+		wb.save(File_Name)
 
 
 for i in Closer_11_Row:
-	Letter = 18            #Starts at the letter S, which is where 11PM starts
-	for color in range(4): #Instead of merging the cells we just painted them all black to help make things easier as we move forward
-	#ws.merge_cells('S' + i[1:] + ':V' + i[1:])
-		ws[ALPHABET[Letter] + i[1:]].fill = Dark
-		ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
-		Letter += 1
-		#wb.save(File_Name)
+	if TypeOfRotation == 0:
+		# Morning equivalent: 7:30am-3:30pm (was 4:00pm-11:00pm) -- start stays on the D/E baseline
+		Letter = 20            #Starts at the letter U -> 3:00PM
+		for color in range(2): # U,V -> 3:00PM-4:00PM
+			ws[ALPHABET[Letter] + i[1:]].fill = Dark
+			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+			Letter += 1
+	elif TypeOfRotation == 1:
+		Letter = 18            #Starts at the letter S, which is where 11PM starts
+		for color in range(4): #Instead of merging the cells we just painted them all black to help make things easier as we move forward
+		#ws.merge_cells('S' + i[1:] + ':V' + i[1:])
+			ws[ALPHABET[Letter] + i[1:]].fill = Dark
+			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
+			Letter += 1
+			#wb.save(File_Name)
 
 #Adding Dark Boxes and the word "SKIP" to the end of 4-12 Shifts
 for i in Shift_Rows:
-	Letter = 20           #Starts at the letter U, which is where 12PM starts
-	for color in range(2):
+	Letter = 21           #Starts at the letter V, the dark box begins after column U
+	for color in range(1):
 		ws[ALPHABET[Letter] + i[1:]].fill = Dark
 		ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
 		Letter += 1
@@ -1068,7 +1085,7 @@ for a in Lead_Rows:
 
 
 print (B1_Full_Shift_Rows)
-print ('Done testing')
+print ('Done testing.. Look at new code.')
 wb.save(File_Name)
 #sleep(99999)
 
@@ -1112,7 +1129,11 @@ sleep(0)
 #---------------------------------- Below is the Code to add Post in
 
 Freight_Times = [] #Make it self adjustable
-Break_Times = ['J{eat_time}:K{eat_time}','J{eat_time}', 'K{eat_time}', 'L{eat_time}:M{eat_time}', 'L{eat_time}', 'M{eat_time}', 'N{eat_time}:O{eat_time}', 'N{eat_time}', 'N{eat_time}' ] #K - N is 7:00PM - 8:30PM
+#Break_Times = ['J{eat_time}:K{eat_time}','J{eat_time}', 'K{eat_time}', 'L{eat_time}:M{eat_time}', 'L{eat_time}', 'M{eat_time}', 'N{eat_time}:O{eat_time}', 'N{eat_time}', 'N{eat_time}' ] #K - N is 7:00PM - 8:30PM
+if TypeOfRotation == 0: # AM / Morning
+	Break_Times = ['L{eat_time}:M{eat_time}', 'L{eat_time}', 'M{eat_time}', 'N{eat_time}:O{eat_time}', 'N{eat_time}', 'O{eat_time}', 'P{eat_time}:Q{eat_time}', 'P{eat_time}', 'Q{eat_time}']
+elif TypeOfRotation == 1: # PM / Night
+	Break_Times = ['J{eat_time}:K{eat_time}','J{eat_time}', 'K{eat_time}', 'L{eat_time}:M{eat_time}', 'L{eat_time}', 'M{eat_time}', 'N{eat_time}:O{eat_time}', 'N{eat_time}', 'O{eat_time}' ]
 #Captured the empty cells starting at letter F until OB1. That would be
 #everyone that needs a break. Remember anything filled in dark isnt an empty cell the word 'SKIP' is written in them with black font
 #eat_time will be replaced with the row number for the break time
@@ -1171,48 +1192,6 @@ Freight_Start = Letter_Times['7:30'] #This will be the column Freight officially
 Freight_End = Letter_Times['9:00']
 Freight_Break_Check = Letter_Times['7:00']   #This will be the column after Freight is officially over. Should not be apart of Fright cell. Used to check and make sure this person's break aligns with Freight
 
-
-
-#Recently Moved Here
-'''
-YES DELETE LATER.....
-def Temporary_Value(Cord_In_Merged_Cell, the_cell_value):
-
-		# Specify the cell you want to check
-		target_cell = ws[Cord_In_Merged_Cell] #-----> Will be used for the parameter of the function
-
-		if the_cell_value is None:
-
-			# Check if the cell is part of a merged cell
-			if target_cell.coordinate in ws.merged_cells:
-			    # If it is, find the merged cell range
-			    merged_cell_range = None
-			    for merged_range in ws.merged_cells.ranges:
-			        if target_cell.coordinate in merged_range:
-			        	merged_cell_range = merged_range
-			        	Father_Value = str(merged_cell_range)
-			        	#print (Father_Value)
-			        	Father_Value = Father_Value[0] + Cord_In_Merged_Cell[1:]
-			        	#print (Father_Value)
-			        	Father_Value = ws[Father_Value].value
-			        	#print (Father_Value)
-			        	return (Father_Value)
-			        	#sleep(999)
-			        	break
-
-			    #if merged_cell_range:
-			    	#print(f"The cell {target_cell.coordinate} is part of the merged cell range {merged_cell_range}.... should return the value of the merged cell")
-			    #else:
-			        #print(f"The cell {target_cell.coordinate} is part of a merged cell, but the range couldn't be determined.")
-			#else:
-				
-			    #print(f"The cell {target_cell.coordinate} is not part of a merged cell.")
-
-			    #print ('In order for this future function to be complete, have it return/print the value of the merged cell its originally apart of')
-			    
-		elif the_cell_value is not None:
-			return (the_cell_value)		     #Keep this Code Alive
-'''
 
 
 
@@ -2591,8 +2570,12 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 	Leave_At_11_Closers = []
 	#This will hold a list of closers that are only here until 11 on B1
 
-	#Only Column R will have 3 - 4 Different Post in Total for the Closing shifts (Rise Tab & Line, Prep, Clear)
 	if Floor_B1[0][0] != 'R':
+		print ('Plan the next steps. Possible will trap the 3 if/elif and if statements under this if statement and add a pm condition only.')
+		
+
+	#Only Column R will have 3 - 4 Different Post in Total for the Closing shifts (Rise Tab & Line, Prep, Clear) -- PM only, AM just runs the normal rotation
+	if Floor_B1[0][0] != 'R' or TypeOfRotation == 0:
 		while B1_Creation_Whole != 2:
 			#We chose 2 because there are 2 Rotation Checks at the very end. Once each is completed perfectly, the while Loop stops completely.
 
@@ -2972,23 +2955,7 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 								cell2 = Temporary_Value(Cords, ws[Cords].value)                 	#ws[Floor_Cords].value | Will be the value of the Floor's Cord List Cells which is the most recent list in the excel and also printed out in the terminal when its ran
 								cell = Temporary_Value(Letter_Next_To_1 + Cords[1:], ws[Letter_Next_To_1 + Cords[1:]].value) #ws[Letter_Next_To_1 + Floor_Cords[1:]].value | Will be the value of the 2nd cell directly to the left of the most filled in Column
 
-								'''
-								#AI Assited Code
-								# 1. 'cell' is the post in the current column (e.g., Column I)
-								cell = Temporary_Value(Cords, ws[Cords].value)
-							    
-							    # 2. Get the index of the current column (I) and move it +1 to the right (J)
-								curr_col_letter = Cords[0]
-								next_col_idx = column_index_from_string(curr_col_letter) + 1
-								next_col_letter = get_column_letter(next_col_idx)
-							    
-							    # 3. 'cell2' is now looking at the NEXT column (e.g., Column J)
-								cell2 = Temporary_Value(next_col_letter + Cords[1:], ws[next_col_letter + Cords[1:]].value)
-							    
-							    # Now, when Row 17 is checked:
-							    # cell = I17 (PLAZA VANDY)
-							    # cell2 = J17 (Whatever they moved to next)
-							    '''
+								
 
 								
 
@@ -3270,7 +3237,7 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 
 				Cords_Already_Checked.append(Post_Starter)
 				#To prevent Re-Doing the same Post Starter Cords
-	elif Floor_B1[0][0] == 'R':
+	elif Floor_B1[0][0] == 'R' and TypeOfRotation == 1:
 		print ('')
 		print ('Last post for the PM Shift')
 		print (len(B1_Temporary_Post))
@@ -3330,11 +3297,21 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 
 		for i in Full_Shift_12PM_Closers:
 			Column_Number = ALPHABET.index(i[0]) + 1 #If this is 0 it re-makes the 1st Column, if its a value of 1 it redoes the 2nd Column
-			Cell = i + ':' + ALPHABET[Column_Number + 1] + i[1:] #Extends the Cell to 3 Cells
-			Create_Post(Cell, int(i[1:]), Column_Number, B1_Temporary_Post[Post_Tier])
-			B1_Cell = PatternFill(patternType = 'solid', fgColor = B1)
-			ws[i].fill = B1_Cell
-			print ('Post Added: ', B1_Temporary_Post[Post_Tier])
+			Post_Now = B1_Temporary_Post[Post_Tier]
+
+			# R = PREP (single cell) for everyone, then S:U = CLEAR or RISE TABLET
+			Create_Post(i, int(i[1:]), Column_Number, 'PREP**')
+			ws[i].fill = PatternFill(patternType = 'solid', fgColor = PREP)
+
+			Last_Post_Start = ALPHABET[Column_Number] + i[1:]                              # S
+			Last_Post_Cell = Last_Post_Start + ':' + ALPHABET[Column_Number + 2] + i[1:]   # S:U
+			Create_Post(Last_Post_Cell, int(i[1:]), Column_Number + 1, Post_Now)
+			if Post_Now == 'CLEAR':
+				ws[Last_Post_Start].fill = PatternFill(patternType = 'solid', fgColor = CLEAR_COLOR)
+			else:
+				ws[Last_Post_Start].fill = PatternFill(patternType = 'solid', fgColor = B1)
+
+			print ('Post Added: ', Post_Now)
 			print (Post_Tier)
 			Post_Tier += 1
 			print (i)
@@ -3355,14 +3332,9 @@ def B1_Rotations_Creation_Updated(column_letter, col_num):
 				print (i)
 				print ('')
 			'''
-		
+				
 
-						
-
-
-					
-
-	if Floor_B1[0][0] != 'R': #Put this here recently to by pass an error
+	if Floor_B1[0][0] != 'R' or TypeOfRotation == 0: #Put this here recently to by pass an error -- AM's column R returns normally too
 		print ('Cords that Start the Rotation: ', Post_Pushing_Rotations_Cordinates)
 		print ('Cords that Start the Previous Rotation: ', Previous_Post_Pushing_Rotations_Cordinates)
 		print ('')
@@ -3472,6 +3444,7 @@ def BreakTime(column_letter, break_list):
 	num = 3 #Used to help division run smoothly with breaks. Their are 3 windows where breaks can be chosen from
 	break_num = 0 #Gonna be used to help issue out breaks for 4 - 11 people and help them be randomized using the Break_Time list
 	Short_Breaks = [1, 2] #To help shuffle between 30 minute breaks for etheir 6:30 or 7:00 etc
+	Evenly_Determines_Short_Breaks = [0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1]
 	start_row = 5
 	end_row = int(Locate('OB1')[0][1:])
 	random.shuffle(break_list)
@@ -3486,7 +3459,7 @@ def BreakTime(column_letter, break_list):
 			cell = ws[ALPHABET[index] + i[1:]]
 			print ('For Cell: ', ALPHABET[index] + i[1:])
 
-			Break_Cordinates_Short = Break_Times[break_num + Short_Breaks[0]].format(eat_time=i[1:])
+			Break_Cordinates_Short = Break_Times[break_num + Short_Breaks[Evenly_Determines_Short_Breaks[0]]].format(eat_time=i[1:])
 			Break_Cordinates = Break_Times[break_num].format(eat_time=i[1:])
 			print ('Break Cord: ',Break_Cordinates_Short)
 			print (Break_Cordinates[:3])
@@ -3495,13 +3468,13 @@ def BreakTime(column_letter, break_list):
 			the_correct_column_short = ALPHABET.index(Break_Cordinates_Short[0]) + 1
 
 			Left_Side_Break = ['J', 'L', 'N']
-			Right_Side_Break = ['K', 'M']
+			Right_Side_Break = ['K', 'M', 'O']
 			#If the short breaks are in any of these letter columns, we will add a prep rotation on the opposite side
 
 			filtered_strings = [string for string in Closer_11_Row if len(string) == len(i) and i[1:] in string]
 			#Replace the other if statements with the same filtered string
 
-			if (cell.value) is None and filtered_strings: #Gotta make it equal exact string cause 7 and 17 are getting confused, could also do matchaing len
+			if TypeOfRotation == 1 and (cell.value) is None and filtered_strings: #Gotta make it equal exact string cause 7 and 17 are getting confused, could also do matchaing len
 				print ('30 Minute Break')
 				BREAK_CELL = PatternFill(patternType = 'solid', fgColor = BREAK)
 				ws[Break_Cordinates_Short].fill = BREAK_CELL
@@ -3520,7 +3493,7 @@ def BreakTime(column_letter, break_list):
 					Create_Post(PREP_Cord, int(i[1:]), PREP_Cord_Index, 'PREP')
 
 
-			elif (cell.value) is None and any(i[1:] in string for string in Shift_Rows):
+			elif (cell.value) is None and (filtered_strings or any(i[1:] in string for string in Shift_Rows)):
 				print ('Hour Break for Closer')
 				BREAK_CELL = PatternFill(patternType = 'solid', fgColor = BREAK)
 				ws[RemoveSemiColon(Break_Cordinates[:3])].fill = BREAK_CELL
@@ -3536,6 +3509,7 @@ def BreakTime(column_letter, break_list):
 		break_num += 3
 		break_list = [item for item in break_list if item not in temp_list]
 		index = (ALPHABET.index(column_letter)) + 2
+		Evenly_Determines_Short_Breaks.pop(0)
 
 
 
@@ -3548,7 +3522,10 @@ def BreakTime(column_letter, break_list):
 
 	All_Breaks = Locate('BREAK')
 	All_B1_Leads_Breaks = []
-	Break_Col = ['J', 'L', 'N']
+	if TypeOfRotation == 0:
+		Break_Col = ['L', 'N', 'P']
+	else:
+		Break_Col = ['J', 'L', 'N']
 	random.shuffle(Break_Col)
 
 
@@ -3617,7 +3594,10 @@ def BreakTime(column_letter, break_list):
 
 
 
-BreakTime('J', B1_Breaks_Needed)
+if TypeOfRotation == 0:
+	BreakTime('L', B1_Breaks_Needed)
+else:
+	BreakTime('J', B1_Breaks_Needed)
 
 print ('Testing Break Times... Line 3051')
 
@@ -3774,7 +3754,8 @@ def Freight_Time(the_row_we_start_counting_from, the_row_we_will_end_row, amount
 	
 
 #Freight List is properly created. Randomize it then create post for Freight
-Freight_Time(5, int(Locate('OB1')[0][1:]), 1)
+if TypeOfRotation == 1:
+	Freight_Time(5, int(Locate('OB1')[0][1:]), 1)
 
 B1_Floor_Rows = []
 FloorCellCount('J', B1_Floor_Rows, 'OB1', 5)
@@ -3800,6 +3781,9 @@ B1_Rotations_Creation_Updated('Q', 16)
 B1_Floor_Rows = []
 FloorCellCount('R', B1_Floor_Rows, 'OB1', 5)
 B1_Rotations_Creation_Updated('S', 18)
+print ('Sleeping at 3783')
+wb.save(File_Name)
+#sleep(99999)
 
 print ('Testing Finished for B1')
 #sleep(99999)
@@ -3960,8 +3944,8 @@ for i in Shift_Rows:
 			wb.save(File_Name)
 
 	else:
-		Letter = 20           #Starts at the letter U, which is where 12PM starts
-		for color in range(2):
+		Letter = 21           #Starts at the letter V, the dark box begins after column U
+		for color in range(1):
 			ws[ALPHABET[Letter] + i[1:]].fill = Dark
 			ws[ALPHABET[Letter] + i[1:]].value = 'SKIP'
 			Letter += 1
@@ -4060,11 +4044,17 @@ for i in All_Shifts_Rows:
 
 
 #Creating Breaks for every Full Shift upstairs
-BreakTime('J', Every_Full_Shift_Upstairs_Rows)
+if TypeOfRotation == 0: # AM / Morning
+	BreakTime('L', Every_Full_Shift_Upstairs_Rows)
+elif TypeOfRotation == 1: # PM / Night
+	BreakTime('J', Every_Full_Shift_Upstairs_Rows)
 
 All_Breaks = Locate('BREAK')
 All_Upstairs_Leads_Breaks = []
-Break_Col = ['J', 'L', 'N']
+if TypeOfRotation == 0: # AM / Morning
+	Break_Col = ['L', 'N', 'P']
+else: # PM / Night
+	Break_Col = ['J', 'L', 'N']
 random.shuffle(Break_Col)
 
 
@@ -4137,7 +4127,7 @@ if len(All_Upstairs_Leads_Breaks) > 1:
 
 
 #Searching all B1 Post to see if a Lead was given the RADIO post. If not we will give it a Lead on OB1
-RADIO_Post = ws['D' + i[1:]]
+RADIO_Post = ws['F5']
 Radio_Post_Found = 0
 for i in Lead_Rows:
 	if int(i[1:]) < OB1_Cordinate:
@@ -4145,7 +4135,7 @@ for i in Lead_Rows:
 		if RADIO_Post.value == 'RADIO':
 			Radio_Post_Found += 1
 			print ('Radio Post has been given to a B1 Lead')
-			sleep(9999)
+			
 
 #If their isn't a RADIO Lead down stairs, it will give the RADIO post to a Lead Upstairs
 if Radio_Post_Found == 0 and len(Leads_Upstairs) > 0:
@@ -4160,7 +4150,8 @@ if Radio_Post_Found == 0 and len(Leads_Upstairs) > 0:
 
 
 #Creating OB1 and OB2 Fright Post
-Freight_Time(int(Locate('OB1')[0][1:]), int(ws.max_row) + 1, 3) #Changed from 4 to 3
+if TypeOfRotation == 1:
+	Freight_Time(int(Locate('OB1')[0][1:]), int(ws.max_row) + 1, 3) #Changed from 4 to 3
 
 
 
@@ -5918,7 +5909,23 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 	breakerninefix = Name of the comments where all the breaker's leaving at 9:30 or half an hour rotation, solution code will be. 
 	Delete it all and the code will work just fine. Code below
 	'''
-	if OB1_OB2_Floor_Rows[0][0] == 'P':
+	if OB1_OB2_Floor_Rows[0][0] == 'R' and TypeOfRotation == 0:
+		# AM equivalent of the 'P'/PM block below: R is where the AM Breaker group's last
+		# working hour lands, so identify upstairs Breaker rows here and pull them out of the
+		# general pool -- they get their own final post assigned further down instead.
+		print ('Before: ', OB1_OB2_Floor_Rows)
+		OB1_Row_Num = int(Locate('OB1')[0][1:])
+		Upstairs_Breaker_Shifts_Cords = []
+		for a in OB1_OB2_Floor_Rows:
+			for i in Locate('6pm-10:30pm'):
+				if i[1:] == a[1:]:
+					Upstairs_Breaker_Shifts_Cords.append(a)
+		Upstairs_Breaker_Shifts_Cords = set(Upstairs_Breaker_Shifts_Cords)
+		OB1_OB2_Floor_Rows[:] = [item for item in OB1_OB2_Floor_Rows if item not in Upstairs_Breaker_Shifts_Cords]
+		print ('After: ' , OB1_OB2_Floor_Rows)
+		wb.save(File_Name)
+
+	if OB1_OB2_Floor_Rows[0][0] == 'P' and TypeOfRotation == 1:
 		print ('Before: ', OB1_OB2_Floor_Rows)
 		OB1_Row_Num = int(Locate('OB1')[0][1:])
 		Upstairs_Breaker_Shifts_Cords = []
@@ -6965,6 +6972,8 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 							OB1_OB2_Floor_Rows_Relief_List.append(cel_cord)
 							Celeb_B1_Cord = cel_cord #Important
 							# This var is important to be used later to let our code know not to delete CAB 2.
+
+							
 							
 							# Logic balancing for floor split
 							if int(cel_row) < int(Locate('OB2')[0][1:]):
@@ -7159,7 +7168,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 
 
 
-	for i in range(int(Locate('OB1')[0][1:]), int(Locate('OB3')[0][1:])):
+	for i in range(int(Locate('OB1')[0][1:]), int(ws.max_row) + 1):
 		print (OB1_OB2_Floor_Rows[0][0])
 		if OB1_OB2_Floor_Rows[0][0] != 'R' or ws[OB1_OB2_Floor_Rows[0][0] + str(i)].value == None or ws[OB1_OB2_Floor_Rows[0][0] + str(i)].value in EVERYTHING_ELSE or 'FREIGHT' in ws[OB1_OB2_Floor_Rows[0][0] + str(i)].value:
 			OB1_OB2_Floor_Rows_Relief_List.append(OB1_OB2_Floor_Rows[0][0] + str(i))
@@ -7408,9 +7417,17 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			print ('---------------------------')
 			print (int(Locate('OB1')[0][1:]) + 1)
 			print (i)
-			Post_Pushing_Rotations_Cordinates.append(Post_Pushing_Rotations_Cordinates[0][0] + i[1:])
-			print ('Post Added: ', Post_Pushing_Rotations_Cordinates[0][0] + i[1:])
-			print (Post_Pushing_Rotations_Cordinates)
+
+			# Only treat the prior hour's coordinate as a Post Starter if that
+			# person was on BREAK or a B1 Tier 2 post the hour before -- a safe hand-off point
+			prior_col = ALPHABET[ALPHABET.index(Letter_Currently) - 1]
+			candidate_cord = prior_col + i[1:]
+			candidate_value = Temporary_Value(candidate_cord, ws[candidate_cord].value)
+
+			if candidate_value == 'BREAK' or candidate_value in B1_Tier_2:
+				Post_Pushing_Rotations_Cordinates.append(candidate_cord)
+				print ('Post Added: ', candidate_cord)
+				print (Post_Pushing_Rotations_Cordinates)
 			#sleep(99999)
 
 
@@ -7549,6 +7566,8 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			Locked_Cab_Cords = []          # Humans currently locked into Elevator posts
 
 			if Using_Celebrate_From_B1 > 0:
+				print (Floor_OB1, Floor_OB2) #If the B1 Coord is in this, add it to Celeb var below later if its empty | Delete later
+				print (Celeb_B1_Cord) #If this is an error, we can loop through OB1_OB2_Floor_Rows, or Floor_OB1 and Floor_OB2 and add the B1 Coord. | Delete later
 				OB1_OB2_Floor_Rows.append(Celeb_B1_Cord)
 				#Choosing not to forget to add that B1 Cord we borrowed due to short staff
 
@@ -7565,7 +7584,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					OB1_OB2_Floor_Rows.append(coord)
 
 			#breakerninefix
-			if OB1_OB2_Floor_Rows[0][0] == 'P':
+			# This hour's floor-rows list just got rebuilt fresh above -- re-apply the same
+			# Upstairs Breaker removal (AM at R) so they don't get scooped back into the
+			# general candidate pool before their own final post is assigned.
+			if OB1_OB2_Floor_Rows[0][0] == 'R' and TypeOfRotation == 0:
+				OB1_OB2_Floor_Rows[:] = [item for item in OB1_OB2_Floor_Rows if item not in Upstairs_Breaker_Shifts_Cords]
+
+			# Same idea, PM at P.
+			if OB1_OB2_Floor_Rows[0][0] == 'P' and TypeOfRotation == 1:
 				OB1_OB2_Floor_Rows[:] = [item for item in OB1_OB2_Floor_Rows if item not in Upstairs_Breaker_Shifts_Cords]
 
 			# --- 2. SYNC THE JOB POOL WITH LOCKED HUMANS ---
@@ -7580,6 +7606,13 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			if len(Both_Floor_Temporary_Post) > len(OB1_OB2_Floor_Rows):
 				print(f"Staffing Deficit: {len(Both_Floor_Temporary_Post)} jobs vs {len(OB1_OB2_Floor_Rows)} humans.")
 				
+				#B1 Coord that we borrow earlier is sometimes being forgotten and not included inside OB1_OB2_Floor_Rows list
+				b1_limit = int(Locate('OB1')[0][1:])
+				for b1_cord in Floor_OB1 + Floor_OB2:
+					if b1_cord[0] == current_col_letter and int(b1_cord[1:]) < b1_limit and b1_cord not in OB1_OB2_Floor_Rows:
+						OB1_OB2_Floor_Rows.append(b1_cord)
+						OB1_OB2_Floor_Rows_Relief_List.append(b1_cord)
+
 				while len(Both_Floor_Temporary_Post) > len(OB1_OB2_Floor_Rows):
 					print ('')
 					print ('Error Here: Line 7099')
@@ -7622,76 +7655,128 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 									print(f"CRITICAL SHORTAGE: Unmerged and sacrificed CAB 2** at {i}")
 							removed = True
 
-					# STEP C: Sacrifice Celebrate on B1 by swapping Prep/Break logic
+					# STEP C: Sacrifice Celebrate on B1, gated by Prep coverage in this column and the next
 					if not removed:
 						current_col_letter = OB1_OB2_Floor_Rows[0][0]
 						b1_limit = int(Locate('OB1')[0][1:])
-						b1_preps = []
+						col_idx = ALPHABET.index(current_col_letter)
+						neighbor_col = ALPHABET[col_idx + 1]
 
-						# 1. Find all PREP posts on B1 for this specific hour
+						# 1. Require at least one PREP post on B1 in this column AND one in the next column
+						#    (they do not have to be on the same row)
 						all_preps = Locate('PREP')
-						if all_preps:
-							for p_cord in all_preps:
-								# Check if it matches current column and is on floor B1
-								if p_cord[0] == current_col_letter and int(p_cord[1:]) < b1_limit:
-									b1_preps.append(p_cord)
+						b1_preps_current = [p for p in all_preps if p[0] == current_col_letter and int(p[1:]) < b1_limit]
+						b1_preps_neighbor = [p for p in all_preps if p[0] == neighbor_col and int(p[1:]) < b1_limit]
 
-						# 2. If we have 2 or more, we can afford to flip one and sacrifice Celebrate
-						random.shuffle(b1_preps)
-						if len(b1_preps) >= 2:
-							print(f"CONTINGENCY C: Found {len(b1_preps)} Preps on B1. Executing swap...")
-							
-							# Target the first Prep found to reverse their schedule
-							target_prep_cord = b1_preps[0]
-							row_num = int(target_prep_cord[1:])
-							col_idx = ALPHABET.index(current_col_letter)
-							
-							# Identify the neighbor cell (the second half of the hour)
-							neighbor_col = ALPHABET[col_idx + 1]
-							neighbor_cord = neighbor_col + str(row_num)
+						if b1_preps_current and b1_preps_neighbor:
+							print(f"CONTINGENCY C: Found PREP coverage in {current_col_letter} and {neighbor_col} on B1.")
 
-							# REVERSE LOGIC: Instead of [Prep -> Break], make it [Break -> Prep]
-							# Handle Current Cell (Change Prep to Break)
-							Create_Post(target_prep_cord, row_num, col_idx + 1, 'BREAK')
-							ws[target_prep_cord].fill = PatternFill(patternType='solid', fgColor=BREAK)
+							# 2. Only rebalance Prep/Break if the 4:00pm-11:00pm crowd on B1 this hour is
+							#    lopsided by 2 or more -- flip one person to close the gap
+							four_eleven_rows = {int(c[1:]) for c in Locate('4:00pm-11:00pm')}
+							b1_breaks_current = [p for p in Locate('BREAK') if p[0] == current_col_letter and int(p[1:]) < b1_limit]
 
-							# Handle Neighbor Cell (Change Break to Prep)
-							Create_Post(neighbor_cord, row_num, col_idx + 2, 'PREP')
-							ws[neighbor_cord].fill = PatternFill(patternType='solid', fgColor=PREP)
-							
+							four_eleven_preps = [p for p in b1_preps_current if int(p[1:]) in four_eleven_rows]
+							four_eleven_breaks = [p for p in b1_breaks_current if int(p[1:]) in four_eleven_rows]
+							prep_break_gap = len(four_eleven_preps) - len(four_eleven_breaks)
+
+							print(f"CONTINGENCY C: 4-11 Preps ({len(four_eleven_preps)}) vs Breaks ({len(four_eleven_breaks)}) on B1 for {current_col_letter}.")
+
+							if abs(prep_break_gap) >= 2:
+								# Pick from whichever side is over-represented and flip one to balance it out
+								if prep_break_gap > 0:
+									source_cords, from_label, to_label = four_eleven_preps, 'PREP', 'BREAK'
+								else:
+									source_cords, from_label, to_label = four_eleven_breaks, 'BREAK', 'PREP'
+
+								random.shuffle(source_cords)
+								target_cord = source_cords[0]
+								row_num = int(target_cord[1:])
+								neighbor_cord = neighbor_col + str(row_num)
+
+								print(f"CONTINGENCY C: 4-11 gap is {prep_break_gap}. Flipping {target_cord} from {from_label} to {to_label}.")
+
+								# Flip this person's current slot, and reverse their next slot to match
+								Create_Post(target_cord, row_num, col_idx + 1, to_label)
+								ws[target_cord].fill = PatternFill(patternType='solid', fgColor=BREAK if to_label == 'BREAK' else PREP)
+
+								Create_Post(neighbor_cord, row_num, col_idx + 2, from_label)
+								ws[neighbor_cord].fill = PatternFill(patternType='solid', fgColor=BREAK if from_label == 'BREAK' else PREP)
+							else:
+								print(f"CONTINGENCY C: 4-11 Prep/Break gap is only {prep_break_gap}, no swap needed.")
+
 							# 3. SACRIFICE CELEBRATE
+							Found_it = 0
 							b1_celebrates = Locate('CELEBRATE')
 							if b1_celebrates:
 								for c_cord in b1_celebrates:
 									if c_cord[0] == current_col_letter and int(c_cord[1:]) < b1_limit:
 										print(f"CONTINGENCY C: Sacrificing Celebrate at {c_cord} for upstairs.")
-										
+
 										# Unmerge and clear the Celebrate cell
 										for merged_range in list(ws.merged_cells.ranges):
 											if c_cord in merged_range:
 												ws.unmerge_cells(str(merged_range))
-										
+
 										ws[c_cord].value = None
 										ws[c_cord].fill = PatternFill(fill_type=None, end_color='FFFFFF')
-										
+
 										# Add the Celebrate person to the upstairs pool
 										OB1_OB2_Floor_Rows.append(c_cord)
-										
+										OB1_OB2_Floor_Rows_Relief_List.append(c_cord)
+										Celeb_B1_Cord = c_cord
+
+										# Check the post this B1 person had last hour -- if it was a BREAK or a
+										# B1 Tier 2 post, that's a safe hand-off point, so treat that coordinate
+										# as a Post Starter for the upstairs rotation check.
+										prior_col = ALPHABET[ALPHABET.index(current_col_letter) - 1]
+										prior_cord = prior_col + c_cord[1:]
+										prior_value = Temporary_Value(prior_cord, ws[prior_cord].value)
+
+										if prior_value == 'BREAK' or prior_value in B1_Tier_2:
+											if prior_cord not in Post_Pushing_Rotations_Cordinates:
+												Post_Pushing_Rotations_Cordinates.append(prior_cord)
+												print(f"CONTINGENCY C: {prior_cord} ({prior_value}) added as Post Starter for upstairs.")
+
+										ROTATION_STARTERS.extend(Mix_Of_Both_B1_Tiers) #Important
+										ROTATION_STARTERS.append('CELEB') #Important
+
 										# If reversing a reversed floor, ensure it's added to the right sub-list
 										if int(c_cord[1:]) < int(Locate('OB2')[0][1:]):
 											Floor_OB1.append(c_cord)
 										else:
 											Floor_OB2.append(c_cord)
-											
+
 										removed = True
-										print ('See if it works.. Error possibly here')
+
+										# 4. RE-ASSIGN COVERAGE: put two PREP staff (one in this column, one in the
+										#    next) onto Celebrate duty now that the original person is sacrificed
+										if b1_preps_current and b1_preps_neighbor:
+											current_cover_cord = b1_preps_current[0]
+											neighbor_cover_cord = b1_preps_neighbor[0]
+
+											ws[current_cover_cord].value = 'CELEB'
+											ws[neighbor_cover_cord].value = 'CELEB'
+											print(f"CONTINGENCY C: {current_cover_cord} and {neighbor_cover_cord} now covering Celebrate.")
+
 										wb.save(File_Name)
-										#sleep(1401)
+										Using_Celebrate_From_B1 += 1
+
+
+										Found_it += 1 #Delete this var later
 										break # Only sacrifice one Celebrate per trigger
+								if Found_it == 0:
+									print ('No celebrate on B1?')
+									print (Using_Celebrate_From_B1)
+									print (Floor_OB1)
+									print (Floor_OB2)
+									wb.save(File_Name)
+									sleep(99999)
+
 						else:
-							print("CONTINGENCY C: Not enough Preps on B1 to execute Celebrate sacrifice. Line 7671")
+							print(f"CONTINGENCY C: No PREP coverage in both {current_col_letter} and {neighbor_col} on B1. Cannot safely sacrifice Celebrate.")
 							wb.save(File_Name)
-							sleep(1401)
+							sleep(14001)
 
 						
 	
@@ -7852,7 +7937,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 						
 						if not has_recent_cab or len(candidate_pool) <= 2:
 							# SUCCESS: Assign the post
-							m_limit = 2 if current_letter == 'R' else 1
+							m_limit = 1 #CAB always merges 2 cells now, including column R
 							target_range = candidate_cord + ':' + get_column_letter(col_idx + m_limit) + candidate_cord[1:]
 							
 							Create_Post(target_range, int(candidate_cord[1:]), col_idx, cab_job)
@@ -7886,7 +7971,39 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			'''
 
 
-			if OB1_OB2_Floor_Rows[0][0] == 'P' and OB1_Hour_Post == 0:
+			if OB1_OB2_Floor_Rows[0][0] == 'R' and OB1_Hour_Post == 0 and TypeOfRotation == 0:
+				# AM equivalent of the 'P'/PM block below: final post at R (2:00pm).
+				# No blackout here -- the AM Breaker_Rows blackout (S onward) is already handled earlier in the file.
+
+				Random_Tier_2_Post = ['PREP',]
+				Random_Tier_2_Post.extend(OB2_Tier_2)
+				#This will be a list of random Tier 2 Post to give
+
+				Scroll = 0
+				#Will dictate what post to give out for the last rotation using the Random Tier 2 List.
+
+				Random_Tier_2_Post[:] = [item for item in Random_Tier_2_Post if item not in Both_Floor_Temporary_Post]
+				random.shuffle(Random_Tier_2_Post)
+
+				print ('')
+				print (Random_Tier_2_Post)
+				print (Both_Floor_Temporary_Post)
+
+
+				for i in Upstairs_Breaker_Shifts_Cords:
+					Column_Number = ALPHABET.index(i[0]) + 1
+					Cell = i
+					Create_Post(Cell, int(i[1:]), Column_Number, Random_Tier_2_Post[Scroll])
+					OB1_Cell = PatternFill(patternType = 'solid', fgColor = OB1)
+					ws[i].fill = OB1_Cell
+					Scroll += 1
+
+				wb.save(File_Name)
+				print (OB1_Hour_Post)
+				print ('Check here')
+				#sleep(9999)
+
+			elif OB1_OB2_Floor_Rows[0][0] == 'P' and OB1_Hour_Post == 0 and TypeOfRotation == 1:
 
 				Random_Tier_2_Post = ['PREP',]
 				Random_Tier_2_Post.extend(OB2_Tier_2)
@@ -7931,12 +8048,6 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 			for i in OB1_OB2_Floor_Rows:
 				
 
-		
-				
-
-
-
-
 
 
 
@@ -7950,7 +8061,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 							ranges_to_unmerge.add(merged_range.coord)
 							# We store the string representation (e.g., "A1:C3")
 
-					# Now unmerge them
+					# Now unmerge them | Get back to this later and tell it that Freight is Exempt from this
 					if len(ranges_to_unmerge) > 0:
 						for r in ranges_to_unmerge:
 						    ws.unmerge_cells(r)
@@ -7995,10 +8106,10 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					Post_Tier += 1
 					#wb.save(File_Name) 
 
-				#Adding the == R so this if Statement can create OB2 Post that Extend for 3 Columns.
-				elif OB1_OB2_Floor_Rows[0][0] == 'R' and Both_Floor_Temporary_Post[Post_Tier] in Overall_OB2_Post and OB1_Hour_Post == 0: #i in Floor_OB2  |  #This only needs to Create Post 1 time, to ensure that, OB1_Hour_Post has to be 0
+				#Column R OB2 Post now merges 2 cells (R:S) like every other column. Only when S isn't already blacked out (e.g. a shift ending there) -- don't merge a post over a SKIP cell.
+				elif OB1_OB2_Floor_Rows[0][0] == 'R' and ws['S' + i[1:]].value != 'SKIP' and Both_Floor_Temporary_Post[Post_Tier] in Overall_OB2_Post and OB1_Hour_Post == 0: #i in Floor_OB2  |  #This only needs to Create Post 1 time, to ensure that, OB1_Hour_Post has to be 0
 					Column_Number = ALPHABET.index(i[0]) + 1 #if its a value of 1 it redoes the 2nd Column
-					index = ALPHABET.index(i[0]) + 2
+					index = ALPHABET.index(i[0]) + 1
 					Cell = i + ':' + ALPHABET[index] + i[1:]
 					Create_Post(Cell, int(i[1:]), Column_Number, Both_Floor_Temporary_Post[Post_Tier])
 					OB2_Cell = PatternFill(patternType = 'solid', fgColor = OB2)
@@ -8416,13 +8527,14 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					
 					
 					#-b1relief
+					#wb.save(File_Name)
 					if Temporary_Value(Post_Starter, ws[Post_Starter].value) in Mix_Of_Both_B1_Tiers or EVERYTHING_ELSE[1] == Temporary_Value(Post_Starter, ws[Post_Starter].value) or '**' in Temporary_Value(Post_Starter, ws[Post_Starter].value) or Temporary_Value(Post_Starter, ws[Post_Starter].value) in ROTATION_STARTERS:
 
 						Rotation_Complete = 0 #Var used to help end the while Loop below. It'll become 1 at the end of every complete rotation
 
 						while Rotation_Complete == 0: #Should be connected to the amount of post rotation starters there are in this hour rotation
 							print ('Starting With: ', Temporary_Value(Post_Starter, ws[Post_Starter].value))
-							print ('Cord of Post Starter: ', Post_Starter)
+							print ('Cord of Post Starter-: ', Post_Starter)
 							Post_Starter_Already_Relieved.append(Post_Starter)
 							print ('Full List of Post Starters: ', Post_Pushing_Rotations_Cordinates)
 							print ('Inner List #: ', Relieved_Post_Inner_List_Var)
@@ -8433,6 +8545,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 							print ()
 							print ('------')
 							print ('')
+							#wb.save(File_Name)
 
 							#May need to add this concept to my B1 Rotation Post Check and Balance
 							# Determine which physical row we are following
@@ -8992,7 +9105,12 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 				#sleep(9999)
 
 
-				# PASTE THE INITIALIZATION HERE: If this doesn't work, comment out code below and uncomment 7562. 
+				# Make sure every post starter is tracked in the OB1 relief list (catches things like an OB3 Lead coord going missing)
+				for Post_Starter_Cord in Post_Pushing_Rotations_Cordinates_2:
+					if Post_Starter_Cord not in OB1_PT2_Floor_Rows_Relief_List:
+						OB1_PT2_Floor_Rows_Relief_List.append(OB1_PT2_Floor_Rows_Relief_List[0][0] + Post_Starter_Cord[1:])
+
+				# PASTE THE INITIALIZATION HERE: If this doesn't work, comment out code below and uncomment 7562.
 				# Other way copy the code below, find, and uncomment these same 3 lines of code if its easier that way/
 				Rotation_Starting_Post = len(Post_Pushing_Rotations_Cordinates_2)
 				Relieved_Post = [[] for _ in range(Rotation_Starting_Post)]
@@ -9016,7 +9134,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 					
 					#-b1relief
 					if EVERYTHING_ELSE[1] == Temporary_Value(Post_Starter, ws[Post_Starter].value) or '**' in Temporary_Value(Post_Starter, ws[Post_Starter].value) or Temporary_Value(Post_Starter, ws[Post_Starter].value) in ROTATION_STARTERS:
-						#wb.save(File_Name)
+						wb.save(File_Name)
 						Rotation_Complete = 0 #Var used to help end the while Loop below. It'll become 1 at the end of every complete rotation
 
 						if Using_Celebrate_From_B1 > 0:
@@ -9036,8 +9154,7 @@ def Upper_Floor_Rotation_Creation_Both_Floors():
 							print ('Relieved Post Inner List Var: ', Relieved_Post_Inner_List_Var)
 							print ('------')
 							print ('')
-							#if OB1_OB2_Floor_Rows[0][0] == 'P':
-							#	sleep(2)
+							
 							
 							
 
@@ -9400,7 +9517,15 @@ OB1_OB2_Floor_Rows = []
 FloorCellCount('R', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
 Upper_Floor_Rotation_Creation_Both_Floors()
 print ('Column R is Done')
+
+
+
+OB1_OB2_Floor_Rows = []
+FloorCellCount('T', OB1_OB2_Floor_Rows, str(ws.max_row), int(Locate('OB1')[0][1:]))
+Upper_Floor_Rotation_Creation_Both_Floors()
+print ('Column T is Done')
 wb.save(File_Name)
+
 
 
 
@@ -9422,24 +9547,44 @@ for row in ws.iter_rows():
 
 
 
-#Writing in Clear for All Post on OB1 - OB2... not OB3 Yet
+if TypeOfRotation == 1:
+	#Writing in Clear for All Post on OB1 - OB2... not OB3 Yet -- nighttime rotations only, no CLEAR for AM
 
-Clear_Cords_List = []
-#This will be a list of cords that will get clear post at the end of the night...
+	Clear_Cords_List = []
+	#This will be a list of cords that will get clear post at the end of the night...
 
-Start = int(Locate('OB1')[0][1:]) 
-End = int(Locate('OB3')[0][1:])
-for i in range(Start, End):
-	if ws['S' + str(i)].value == None:
-		pass
-	elif ws['S' + str(i)].value in Overall_OB1_Post:
-		Clear_Cords_List.append('T' + str(i))
+	Start = int(Locate('OB1')[0][1:])
+	End = int(Locate('OB3')[0][1:])
 
-for i in Clear_Cords_List:
-	index = ALPHABET.index(i[0]) + 1
-	Create_Post(i, int(i[1:]), index, 'CLEAR')
-	CLEAR_CELL = PatternFill(patternType = 'solid', fgColor = CLEAR_COLOR)
-	ws[i].fill = CLEAR_CELL
+	# Filter down column T -- if it already holds an OB1 Tier 1/2 post, erase T and U and write CLEAR across both
+	for i in range(Start, End):
+		T_Value = ws['T' + str(i)].value
+		if T_Value in Overall_OB1_Post:
+			Clear_Cords_List.append('T' + str(i))
+
+	for i in Clear_Cords_List:
+		index = ALPHABET.index(i[0]) + 1
+		U_Cord = 'U' + i[1:]
+
+		# Unmerge T and U first in case either is already part of a merged range
+		for merged_range in list(ws.merged_cells.ranges):
+			if i in merged_range or U_Cord in merged_range:
+				ws.unmerge_cells(str(merged_range))
+
+		ws[i].value = None
+		ws[U_Cord].value = None
+
+		Clear_Cell = i + ':' + U_Cord
+		Create_Post(Clear_Cell, int(i[1:]), index, 'CLEAR')
+		CLEAR_CELL = PatternFill(patternType = 'solid', fgColor = CLEAR_COLOR)
+		ws[i].fill = CLEAR_CELL
+
+	# For every OB1 Tier 1/2 post sitting in column S (OB2/OB3 posts untouched), add ** if it's missing one
+	for i in range(Start, End):
+		S_Cord = 'S' + str(i)
+		S_Value = ws[S_Cord].value
+		if S_Value in Overall_OB1_Post and '**' not in S_Value:
+			ws[S_Cord].value = S_Value + '**'
 
 
 
@@ -9456,7 +9601,7 @@ for i in Leads_Upstairs:
 
 
 print ('Done Before Merge')
-sleep(99999)
+
 
 
 
@@ -9492,7 +9637,7 @@ for a in Full_Time_Closers_Row:
 		ws['E' + a[1:]].border = border
 		ws['E' + a[1:]].alignment = Center_Text
 		# Save the changes to the workbook
-		wb.save(File_Name)
+		#wb.save(File_Name)
 
 		#if Full_Timers_4PM_Post_Upstairs[num2] in Overall_OB2_Post:
 		#	ws['E' + a[1:]].fill = OB2_Cell
@@ -9531,23 +9676,23 @@ for row in ws.iter_rows():
         if cell.value == 'FLOAT':
         	FLOAT_CELL = PatternFill(patternType = 'solid', fgColor = FLOAT)
         	cell.fill = FLOAT_CELL
-        	wb.save(File_Name)
-        if cell.value == 'OB3 MOMENTO': #Make OB3 List just for the sake of the color code and add it here
+        	#wb.save(File_Name)
+        if cell.value == 'OB3 MOMENTO' or cell.value == 'CAB 1' or cell.value == 'CAB 2**' or cell.value == 'ASCENT DESK': #Make OB3 List just for the sake of the color code and add it here
         	OB3_Cell = PatternFill(patternType = 'solid', fgColor = OB3)
         	cell.fill = OB3_Cell
         elif cell.value in B1_Tier_1:
         	B1_Cell = PatternFill(patternType = 'solid', fgColor = B1)
         	cell.fill = B1_Cell
-        	wb.save(File_Name)
-        elif cell.value == 'PREP**':
+        	#wb.save(File_Name)
+        elif cell.value == 'PREP**' or cell.value == 'PREP':
         	PREP_CELL = PatternFill(patternType = 'solid', fgColor = PREP)
         	cell.fill = PREP_CELL
-        	wb.save(File_Name)
+        	#wb.save(File_Name)
         elif cell.value in Overall_OB1_Post:
         	OB1_Cell = PatternFill(patternType = 'solid', fgColor = OB1)
         	cell.fill = OB1_Cell
-        	wb.save(File_Name)
-        elif cell.value in Overall_OB2_Post:
+        	#wb.save(File_Name)
+        elif cell.value in Overall_OB2_Post or cell.value == 'E TAB':
         	OB2_Cell = PatternFill(patternType = 'solid', fgColor = OB2)
         	cell.fill = OB2_Cell
 
@@ -9558,7 +9703,26 @@ for row in ws.iter_rows():
 
 
 
+# Overwriting Time Stamps based on TypeOfRotation value. Below is the code for the morning hours.
+if TypeOfRotation == 0:
+	Morning_Shift_Times = ['7:00AM', '7:30AM', '8:00AM', '8:30AM', '9:00AM', '9:30AM', '10:00AM', '10:30AM',
+	'11:00AM', '11:30AM', '12:00PM', '12:30PM', '1:00PM', '1:30PM', '2:00PM', '2:30PM', '3:00PM', '3:30PM', '4:00PM']
 
+	for row in ws.iter_rows():
+		for cell in row:
+			if cell.value in PM:
+				cell.value = Morning_Shift_Times[PM.index(cell.value)]
+
+	# Overwrite everyone's shift label to the matching morning-shift equivalent.
+	# WORK_TIMES = ['4:00pm-12:00am', '4:00pm-11:00pm', '6pm-10:30pm', 'LEAD', '3:30pm-12:00pm']
+	Morning_Shift_Labels = ['7:30am-4:00pm', '7:30am-3:30pm', '10:30am-2:30pm', 'LEAD', '7:00am-4:00pm']
+
+	for row in ws.iter_rows():
+		for cell in row:
+			if cell.value in WORK_TIMES:
+				cell.value = Morning_Shift_Labels[WORK_TIMES.index(cell.value)]
+
+	
 
 
 
@@ -9569,9 +9733,20 @@ print ('Also make the floor switch from OB2 on OB1 Floor start at L or N based o
 print ('Also have some 4 - 11s Clear')
 print ('Add OB3 Momento to force us to code in short staff solutions')
 
-print ('Done')
-
+# Cosmetic rename: the "4:00pm-11:00pm" shift is now displayed as "3:30pm-10:30pm"
+if TypeOfRotation == 1:
+	for row in ws.iter_rows():
+		for cell in row:
+			if cell.value == '4:00pm-11:00pm':
+				cell.value = '3:30pm-10:30pm'
+			elif cell.value == '3:30pm-12:00pm':
+				cell.value = '3:00pm-12:00am'
+			elif cell.value == '6pm-10:30pm':
+				cell.value = '5:30pm-9:30pm'
+			elif cell.value == '4:00pm-12:00am':
+				cell.value = '3:30pm-12:00am'
 
 wb.save(File_Name)
+print ('Done Completely')
     
 
